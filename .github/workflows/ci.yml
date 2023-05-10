@@ -1,0 +1,20 @@
+name: iOS ci
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          xcodebuild build -project Health.xcodeproj -scheme Health -destination "platform=iOS Simulator,name=iPhone 14"
