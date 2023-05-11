@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HealthDataView.swift
 //  MC2
 //
 //  Created by 송재훈 on 2023/05/07.
@@ -8,29 +8,12 @@
 import SwiftUI
 import HealthKit
 
-struct ContentView: View {
-    @State var button = false
-    @State var isAnimation = false
-    
-    @StateObject var viewModel = ContentViewModel()
-    
+struct HealthDataView: View {
     @State var healthStore: HKHealthStore?
     
-    @State var todayStepCount = 0.0 {
-        didSet {
-            print(todayStepCount)
-        }
-    }
-    @State var todayActiveEnergy = 0.0 {
-        didSet {
-            print(todayActiveEnergy)
-        }
-    }
-    @State var todayExerciseTime = 0.0 {
-        didSet {
-            print(todayExerciseTime)
-        }
-    }
+    @State var todayStepCount = 0.0
+    @State var todayActiveEnergy = 0.0
+    @State var todayExerciseTime = 0.0
 
     func HealthAuth() {
         guard HKHealthStore.isHealthDataAvailable() else { fatalError("This app requires a device that supports HealthKit") }
@@ -43,12 +26,6 @@ struct ContentView: View {
         
         self.healthStore!.requestAuthorization(toShare: share, read: read) { (success, error) in
             print("Request Authorization -- Success: ", success, " Error: ", error ?? "nil")
-            
-            if success {
-                StepCount()
-                ActiveEnergy()
-                ExerciseTime()
-            }
         }
     }
     
@@ -179,49 +156,34 @@ struct ContentView: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            let geoWidth = geo.size.width
-            let geoHeight = geo.size.height
+        VStack {
+            Spacer()
+            Text("stepCount is \(todayStepCount)")
+            Text("activeEnergy is \(todayActiveEnergy)")
+            Text("exerciseTime is \(todayExerciseTime)")
             
-            HStack(spacing: 0){
-                Image("Cloud")
-                    .resizable()
-                    .frame(width: geoWidth * 1.2, height: geoHeight * 0.6)
-                    .offset(x: isAnimation ? -geoWidth * 1.2 : geoWidth * 0)
-                    .animation(.linear(duration: 10).repeatForever(autoreverses: false), value: isAnimation)
-                
-                Image("Cloud")
-                    .resizable()
-                    .frame(width: geoWidth * 1.2, height: geoHeight * 0.6)
-                    .offset(x: isAnimation ? -geoWidth * 1.2 : geoWidth * 0)
-                    .animation(.linear(duration: 10).repeatForever(autoreverses: false), value: isAnimation)
+            Spacer()
+            Button("HealthAuth") {
+                HealthAuth()
             }
-            .onAppear {
-                isAnimation = true
+            Button("StepCount") {
+                StepCount()
+            }
+            Button("ActiveEnergy") {
+                ActiveEnergy()
+            }
+            Button("ExerciseTime") {
+                ExerciseTime()
             }
             
-            Image("Ground")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxHeight: .infinity, alignment: .bottom)
-                .ignoresSafeArea()
-
-            SnapCarousel()
-                .environmentObject(viewModel.stateModel)
-                .frame(height: geoHeight * 0.3)
-                .frame(maxHeight: .infinity, alignment: .bottom)
-                .ignoresSafeArea()
-                .onAppear {
-                    HealthAuth()
-                    
-                }
-//                .frame(width: geoWidth * 0.5, height:  geoHeight * 0.5)
+            Spacer()
         }
+        .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct HealthDataView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        HealthDataView()
     }
 }
