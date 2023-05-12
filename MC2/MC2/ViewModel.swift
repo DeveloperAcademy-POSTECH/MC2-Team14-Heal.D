@@ -7,7 +7,6 @@ final class ContentViewModel: ObservableObject {
     @Published private(set) var activeCard: Int = 0
     private var cancellables: [AnyCancellable] = []
     
-    
     init() {
             self.stateModel.$activeCard.sink { completion in
                 switch completion {
@@ -20,7 +19,6 @@ final class ContentViewModel: ObservableObject {
                 self?.someCoolMethodHere(for: activeCard)
             }.store(in: &cancellables)
         }
-    
     
     private func someCoolMethodHere(for activeCard: Int) {
         print("someCoolMethodHere: index received: ", activeCard)

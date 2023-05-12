@@ -12,21 +12,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             GeometryReader { geo in
-                let geoWidth = geo.size.width
-                let geoHeight = geo.size.height
-                
                 BackgroundView()
                 ActivityView()
                 ButtonView()
-                //                SnapCarousel()
-                //                    .environmentObject(viewModel.stateModel)
-                //                    .frame(height: geoHeight * 0.3)
-                //                    .frame(maxHeight: .infinity, alignment: .bottom)
-                //                    .ignoresSafeArea()
-                //                    .onAppear {
-                //                        //                        HealthAuth()
-                //
-                //            }
             }
         }
     }
