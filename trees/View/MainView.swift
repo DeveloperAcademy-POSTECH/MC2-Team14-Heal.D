@@ -7,6 +7,15 @@
 
 import SwiftUI
 import CoreData
+//
+//  ContentView.swift
+//  trees
+//
+//  Created by 최진용 on 2023/05/08.
+//
+
+import SwiftUI
+import CoreData
 
 struct MainView: View {
     @State var showSheet: Bool = false
@@ -16,11 +25,38 @@ struct MainView: View {
         NavigationView {
             ZStack {
                 BackgroundView()
+                Plant
+                MileStone
                 Buttons
                 BottomSlider
             }
         }
     }
+    
+    //MARK: - components
+    var Plant: some View {
+        Image("day11").offset(y: 30)
+    }
+    
+    var MileStone: some View {
+        Image("milestone")
+            .resizable()
+            .frame(width: 109, height: 106)
+            .offset(x:120, y: 115)
+            .overlay {
+                VStack{
+                    Text("DD/30")
+                        .foregroundStyle(
+                            .white.gradient
+                                .shadow(.inner(color: .black, radius: 0, x: 1, y: 1))
+                        )
+                }.font(.system(size: 16, weight: .black))
+                    .offset(x: 104, y: 102)
+                    .rotationEffect(Angle(degrees: -4))
+            }
+    }
+    
+    
     var BottomSlider: some View {
         VStack {
             Spacer()
@@ -28,7 +64,6 @@ struct MainView: View {
                 HStack(spacing: 5) {
                     ForEach(0...array.count, id: \.self) { num in
                         GeometryReader { proxy in
-                            let x = proxy.frame(in: .global).minX
                             let scale = getScale(proxy: proxy)
                             let endIdx = array.endIndex
                             if num == endIdx {
@@ -63,7 +98,7 @@ struct MainView: View {
                 Button {
                     showSheet.toggle()
                 } label: {
-                    Rectangle().frame(width: 40, height: 40)
+                    Image("reward").frame(width: 40, height: 40)
                 }.sheet(isPresented: $showSheet) {
                     BedgeView()
                         .presentationDetents([.fraction(0.4)])
@@ -73,11 +108,11 @@ struct MainView: View {
                 NavigationLink {
                     AlartListView()
                 } label: {
-                    Rectangle().frame(width: 40, height: 40)
+                    Image("alarm").frame(width: 40, height: 40)
                 }
             }.padding()
             Spacer()
-        }
+        }.padding(.horizontal)
     }
     
     private func getScale(proxy: GeometryProxy) -> CGFloat {

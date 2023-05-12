@@ -25,6 +25,7 @@
 		0DF4EBDF2A0D0ACF0075D3DC /* AlartListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBDE2A0D0ACF0075D3DC /* AlartListCell.swift */; };
 		0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */; };
 		0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE32A0D35780075D3DC /* HealthCard.swift */; };
+		0DF4EBE62A0E82E60075D3DC /* Bedges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE52A0E82E60075D3DC /* Bedges.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		0DF4EBDE2A0D0ACF0075D3DC /* AlartListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlartListCell.swift; sourceTree = "<group>"; };
 		0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext+UIScreen.swift"; sourceTree = "<group>"; };
 		0DF4EBE32A0D35780075D3DC /* HealthCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCard.swift; sourceTree = "<group>"; };
+		0DF4EBE52A0E82E60075D3DC /* Bedges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bedges.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,8 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				0D027C002A0A180000F5BBBD /* Ext+ */,
-				0D027BF92A08C2BF00F5BBBD /* View */,
 				0D027BF82A08C2B800F5BBBD /* Model */,
+				0D027BF92A08C2BF00F5BBBD /* View */,
 				0D027BC62A08C05A00F5BBBD /* treesApp.swift */,
 				0D027BCF2A08C05C00F5BBBD /* Persistence.swift */,
 				0D027BCA2A08C05C00F5BBBD /* Assets.xcassets */,
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				0D027BFA2A08C2DD00F5BBBD /* UserData.swift */,
+				0DF4EBE52A0E82E60075D3DC /* Bedges.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				0D027C042A0B7D8700F5BBBD /* Clouds.swift in Sources */,
 				0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */,
 				0D027BD02A08C05C00F5BBBD /* Persistence.swift in Sources */,
+				0DF4EBE62A0E82E60075D3DC /* Bedges.swift in Sources */,
 				0D027C022A0A180700F5BBBD /* Ext+Color.swift in Sources */,
 				0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */,
 				0D027BF72A08C10300F5BBBD /* BedgeView.swift in Sources */,
