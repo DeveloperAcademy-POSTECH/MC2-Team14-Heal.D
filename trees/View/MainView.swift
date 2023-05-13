@@ -7,15 +7,6 @@
 
 import SwiftUI
 import CoreData
-//
-//  ContentView.swift
-//  trees
-//
-//  Created by 최진용 on 2023/05/08.
-//
-
-import SwiftUI
-import CoreData
 
 struct MainView: View {
     @State var showSheet: Bool = false
@@ -67,17 +58,9 @@ struct MainView: View {
                             let scale = getScale(proxy: proxy)
                             let endIdx = array.endIndex
                             if num == endIdx {
-                                //인원추가 버튼
-                                Rectangle().foregroundColor(.blue)
-                                    .frame(width: 270, height: 140)
-                                    .padding(.leading, 15)
-//                                            .padding(.trailing, 200)
-                                    .scaleEffect(CGSize(width: scale, height: scale))
+                                Rectangle()
                             } else {
-                                //헬스킷 데이터 뷰
-                                Rectangle().foregroundColor(.red)
-                                    .frame(width: 270, height: 140)
-                                    .padding(.leading, 20)
+                                HealthCard()
                                     .scaleEffect(CGSize(width: scale, height: scale))
                             }
                          }
@@ -100,13 +83,13 @@ struct MainView: View {
                 } label: {
                     Image("reward").frame(width: 40, height: 40)
                 }.sheet(isPresented: $showSheet) {
-                    BedgeView()
+                    AnimalView()
                         .presentationDetents([.fraction(0.4)])
                         .presentationDragIndicator(.visible)
                 }
                 Spacer()
                 NavigationLink {
-                    AlartListView()
+                    AlarmListView()
                 } label: {
                     Image("alarm").frame(width: 40, height: 40)
                 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AlartListCell: View {
+struct AlarmListCell: View {
     var text: String
     var body: some View {
         HStack {
@@ -34,9 +34,9 @@ struct AlartListCell: View {
     }
 }
 
-struct AlartView_Preview: PreviewProvider {
+struct AlarmView_Preview: PreviewProvider {
     static var previews: some View {
         let text = "textwefniweofnwapqegnioqwbeo"
-        AlartListCell(text: text)
+        AlarmListCell(text: text)
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 
 
-struct AlartListView: View {
+struct AlarmListView: View {
     
     var data: [String] = []
     
@@ -23,7 +23,7 @@ struct AlartListView: View {
                         Text("hi").frame(width: width, height: height)
                     } else {
                         ForEach(data, id: \.self) { text in
-                            AlartListCell(text: text)
+                            AlarmListCell(text: text)
                             Divider()
                         }
                     }
@@ -33,8 +33,8 @@ struct AlartListView: View {
     }
 }
 
-struct AlartListView_Preview: PreviewProvider {
+struct AlarmListView_Preview: PreviewProvider {
     static var previews: some View {
-        AlartListView()
+        AlarmListView()
     }
 }
