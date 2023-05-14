@@ -13,6 +13,8 @@ struct AnimalView: View {
     
     @State var isLocked: Bool = true
     
+    let badge: Badge
+    
     var body: some View {
         ZStack {
             Color("backgroundColor")
@@ -20,14 +22,14 @@ struct AnimalView: View {
             
             ScrollView {
                 LazyVGrid(columns: colum) {
-                    ForEach(animals, id: \.self) { animal in
+                    ForEach(badge.badges!, id: \.self) { badge in
                         RoundedRectangle(cornerRadius: 15)
                             .stroke()
                             .background(isLocked ? .gray : .white)
                             .cornerRadius(15)
                             .frame(height: 90)
                             .overlay(content: {
-                                Image("\(animal)").resizable()
+                                Image("\(badge.name)").resizable()
                                     .brightness(isLocked ? -1 : 0)
                                     .scaledToFit()
                                     .padding()
@@ -35,7 +37,7 @@ struct AnimalView: View {
                             })
                         //눌리면 현재 체크된건지 상태를 바꾸고, 코어데이터에 저장해서 나중에 불러올때 문제 없이 처리.
                             .onTapGesture {
-                                print("\(animal)")
+                                print("\(badge.name)")
                             }
                     }
                     //여기가 데이터 배열에서 lock인지 확인한 뒤, 락이라면 띄워주고 아니라면 없는 부분
@@ -48,6 +50,6 @@ struct AnimalView: View {
 
 struct AnimalView_Preview: PreviewProvider {
     static var previews: some View {
-        AnimalView()
+        AnimalView(badge: Badge())
     }
 }

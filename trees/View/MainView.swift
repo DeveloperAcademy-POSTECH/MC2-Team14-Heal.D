@@ -9,11 +9,17 @@ import SwiftUI
 import CoreData
 
 struct MainView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @State var showSheet: Bool = false
     @State var array: [Int] = [1,2,3,3,4,5,2,3,4,5]
     
+    @FetchRequest(
+        entity: User.entity(),
+        sortDescriptors: []
+    )
+    var user: FetchedResults<User>
+    
     var body: some View {
-        
         ZStack {
             BackgroundView()
             Plant
@@ -25,7 +31,7 @@ struct MainView: View {
     
     //MARK: - components
     var Plant: some View {
-        Image("day1").offset(y: 30)
+        Image("day" + String(user.first!.grow!.day)).offset(y: 30)
     }
     
     var MileStone: some View {
@@ -35,7 +41,7 @@ struct MainView: View {
             .offset(x:120, y: 115)
             .overlay {
                 VStack{
-                    Text("DD/30")
+                    Text(String(user.first!.grow!.day) + "/30")
                         .foregroundStyle(
                             .white.gradient
                                 .shadow(.inner(color: .black, radius: 0, x: 1, y: 1))
@@ -52,7 +58,7 @@ struct MainView: View {
             Spacer()
             ScrollView(.horizontal) {
                 HStack(spacing: 5) {
-                    ForEach(0...array.count, id: \.self) { num in
+                    ForEach(0...user.first!.familys!.count, id: \.self) { num in
                         GeometryReader { proxy in
                             let scale = getScale(proxy: proxy)
                             let endIdx = array.endIndex
@@ -84,7 +90,7 @@ struct MainView: View {
                         .resizable()
                         .frame(width: 51, height: 50)
                 }.sheet(isPresented: $showSheet) {
-                    AnimalView()
+                    AnimalView(badge: user.first!.badge!)
                         .presentationDetents([.fraction(0.4)])
                         .presentationDragIndicator(.visible)
                 }
@@ -92,7 +98,9 @@ struct MainView: View {
                 NavigationLink {
                     AlarmListView()
                 } label: {
-                    Image("alarmButton").resizable().frame(width: 45, height: 50)
+                    Image("alarmButton")
+                        .resizable()
+                        .frame(width: 45, height: 50)
                 }
             }.padding()
             Spacer()

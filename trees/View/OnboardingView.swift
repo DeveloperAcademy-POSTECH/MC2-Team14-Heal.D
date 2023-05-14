@@ -7,30 +7,28 @@
 
 import SwiftUI
 import CloudKit
+import CoreData
 
 struct OnboardingView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var text: String = ""
     
-    private let userInfo: CloudKitUserInfo = CloudKitUserInfo.shared
-    
-    @State private var destination: String? = nil
-    
-    @FetchRequest(
-        entity: User.entity(),
-        sortDescriptors: []
-    )
+    @FetchRequest
     var users: FetchedResults<User>
     
     var body: some View {
         VStack(spacing: 30) {
+            TextEditor(text: $text)
+                .background(.yellow)
+            
             List {
-                ForEach(self.users, id: \.self) { user in
-                    Text(user.code! + " " + user.id!)
+                ForEach(users, id: \.self) { user in
+                    Text(user.name!)
                 }
             }
             
             Button {
-                initialize(name: "Test!")
+                initialize(name: text)
             } label: {
                 Text("Start!")
             }
@@ -39,25 +37,35 @@ struct OnboardingView: View {
         .fontWeight(.semibold)
     }
     
+    init() {
+        _users = FetchRequest<User>(
+            entity: User.entity(),
+            sortDescriptors: []
+//            predicate: NSPredicate(format: "code == %@", "9B1B6E")
+        )
+    }
+    
     private func initialize(name: String) {
         let user = User(context: viewContext)
-        user.id = userInfo.id
+        user.id = CloudKitUserInfo.shared.id
         user.name = name
         user.code = String(UUID().uuidString.prefix(6))
         
         let grow = Grow(context: viewContext)
         grow.id = UUID()
-        grow.day = 0
-        grow.level = 0
-
+        grow.day = 1
+        grow.level = 1
         
         let badge = Badge(context: viewContext)
         badge.id = UUID()
-        badge.badge1 = BadgeModel()
+        badge.badges = []
+        for name in BadgeModel.names {
+            badge.badges!.append(BadgeModel(name: name))
+        }
         
-        user.familys = NSSet(object: user)
-        user.grow = grow
         user.badge = badge
+        user.grow = grow
+        user.familys = [user]
         
         grow.user = user
         
