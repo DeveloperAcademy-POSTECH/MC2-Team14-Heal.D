@@ -10,10 +10,10 @@ import SwiftUI
 struct Clouds: View {
     var body: some View {
         ZStack {
-            Image("Cloud")
+            Image("cloud")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-            Image("Cloud")
+            Image("cloud")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         }

@@ -11,17 +11,17 @@ struct Ring: View {
     @Binding var progress: CGFloat
     
     enum RingDiameter: CGFloat { // 원 중점 위치, 지름을 늘리고 줄이면서 원의 시작위치를 바꿈
-        case small = 0.05
-        case medium = 0.15
-        case big = 0.25
-        case calculated = 0.35
+        case small = 0.1
+        case medium = 0.2
+        case big = 0.3
+        case calculated = 0.4
     }
-
+    
     let ringDia: RingDiameter
-
+    
     private var fullCircleDotOffset: CGFloat { return 350 *  -ringDia.rawValue / 2 }
-    private let ringThickness: CGFloat = 13.0 // 두께
-
+    private let ringThickness: CGFloat = 15.0 // 두께
+    
     private var ringColor: [Color] {
         get {
             switch ringDia {
@@ -41,7 +41,7 @@ struct Ring: View {
             }
         }
     }
-
+    
     var body: some View {
         ZStack {
             if self.progress < 0.98 {
@@ -64,7 +64,7 @@ struct Ring: View {
                     .frame(width: self.ringThickness, height: self.ringThickness)
                     .foregroundColor(self.ringColor[0])
                     .offset(y: self.fullCircleDotOffset)
-
+                
             } else {
                 Circle()
                     .scale(self.ringDia.rawValue)
@@ -93,12 +93,13 @@ struct HealthRing: View {
     @Binding var big: CGFloat
     @Binding var medium: CGFloat
     @Binding var small: CGFloat
-
+    
     var body: some View {
         ZStack { // ring 끼리 겹쳐야 하므로 zstack 사용
             Ring(progress: self.$big, ringDia: .big)
             Ring(progress: self.$medium, ringDia: .medium)
             Ring(progress: self.$small, ringDia: .small)
         }
+        
     }
 }

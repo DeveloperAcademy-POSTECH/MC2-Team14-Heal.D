@@ -26,7 +26,7 @@ struct MainView: View {
     
     //MARK: - components
     var Plant: some View {
-        Image("day11").offset(y: 30)
+        Image("day1").offset(y: 30)
     }
     
     var MileStone: some View {
@@ -63,13 +63,13 @@ struct MainView: View {
                                 HealthCard()
                                     .scaleEffect(CGSize(width: scale, height: scale))
                             }
-                         }
+                        }
                     }
                     .frame(width: 270, height: 140)
                     .padding(.trailing, 20)
                 }
                 .padding(.horizontal, 50)
-                    .padding(.vertical, 30)
+                .padding(.vertical, 30)
             }
         }
     }
@@ -81,7 +81,9 @@ struct MainView: View {
                 Button {
                     showSheet.toggle()
                 } label: {
-                    Image("reward").frame(width: 40, height: 40)
+                    Image("animalButton")
+                        .resizable()
+                        .frame(width: 51, height: 50)
                 }.sheet(isPresented: $showSheet) {
                     AnimalView()
                         .presentationDetents([.fraction(0.4)])
@@ -91,7 +93,7 @@ struct MainView: View {
                 NavigationLink {
                     AlarmListView()
                 } label: {
-                    Image("alarm").frame(width: 40, height: 40)
+                    Image("alarmButton").resizable().frame(width: 45, height: 50)
                 }
             }.padding()
             Spacer()
@@ -107,10 +109,9 @@ struct MainView: View {
         }
         return scale
     }
-    
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }

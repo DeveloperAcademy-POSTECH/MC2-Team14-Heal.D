@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AnimalView: View {
-    
     let colum = [GridItem(),GridItem(),GridItem(),GridItem()]
     let animals: [String] = ["defaultOnOff", "bee", "bird", "butterfly", "dragon", "monkey", "parrot", "redDragon", "robusta", "sheep", "whiteBird"]
     

@@ -23,7 +23,7 @@
 		0DF4EBDF2A0D0ACF0075D3DC /* AlarmListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBDE2A0D0ACF0075D3DC /* AlarmListCell.swift */; };
 		0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */; };
 		0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE32A0D35780075D3DC /* HealthCard.swift */; };
-		0DF4EBE62A0E82E60075D3DC /* Bedges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE52A0E82E60075D3DC /* Bedges.swift */; };
+		62B2D9CE2A11507600E5C4A8 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B2D9CD2A11507600E5C4A8 /* Alarms.swift */; };
 		62B3F0DE2A0E90D9002F544B /* HealthRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B3F0DD2A0E90D9002F544B /* HealthRing.swift */; };
 		DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DB0E891D2A10109F00D34E9A /* trees.xcdatamodeld */; };
 /* End PBXBuildFile section */
@@ -66,7 +66,7 @@
 		0DF4EBDE2A0D0ACF0075D3DC /* AlarmListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListCell.swift; sourceTree = "<group>"; };
 		0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext+UIScreen.swift"; sourceTree = "<group>"; };
 		0DF4EBE32A0D35780075D3DC /* HealthCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCard.swift; sourceTree = "<group>"; };
-		0DF4EBE52A0E82E60075D3DC /* Bedges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bedges.swift; sourceTree = "<group>"; };
+		62B2D9CD2A11507600E5C4A8 /* Alarms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarms.swift; sourceTree = "<group>"; };
 		62B3F0DD2A0E90D9002F544B /* HealthRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRing.swift; sourceTree = "<group>"; };
 		DB0E891E2A10109F00D34E9A /* trees.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = trees.xcdatamodel; sourceTree = "<group>"; };
 		DB0E89202A1010C300D34E9A /* trees.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = trees.entitlements; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				0D027BFA2A08C2DD00F5BBBD /* UserData.swift */,
-				0DF4EBE52A0E82E60075D3DC /* Bedges.swift */,
+				62B2D9CD2A11507600E5C4A8 /* Alarms.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -334,13 +334,13 @@
 				0D027C042A0B7D8700F5BBBD /* Clouds.swift in Sources */,
 				0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */,
 				0D027BD02A08C05C00F5BBBD /* Persistence.swift in Sources */,
-				0DF4EBE62A0E82E60075D3DC /* Bedges.swift in Sources */,
 				0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */,
 				0D027BF72A08C10300F5BBBD /* AnimalView.swift in Sources */,
 				0DF4EBDD2A0CC7660075D3DC /* AlarmListView.swift in Sources */,
 				DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */,
 				0D027BC92A08C05A00F5BBBD /* MainView.swift in Sources */,
 				62B3F0DE2A0E90D9002F544B /* HealthRing.swift in Sources */,
+				62B2D9CE2A11507600E5C4A8 /* Alarms.swift in Sources */,
 				0D027BC72A08C05A00F5BBBD /* treesApp.swift in Sources */,
 				0DF4EBDF2A0D0ACF0075D3DC /* AlarmListCell.swift in Sources */,
 			);

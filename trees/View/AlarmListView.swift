@@ -7,16 +7,14 @@
 
 import SwiftUI
 
-
-
 struct AlarmListView: View {
-    
     var data: [String] = []
     
     var body: some View {
         GeometryReader { proxy in
             let width = proxy.size.width
             let height = proxy.size.height
+            
             ScrollView {
                 VStack {
                     if data.isEmpty {
