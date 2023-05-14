@@ -26,6 +26,9 @@
 		62B2D9CE2A11507600E5C4A8 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B2D9CD2A11507600E5C4A8 /* Alarms.swift */; };
 		62B3F0DE2A0E90D9002F544B /* HealthRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B3F0DD2A0E90D9002F544B /* HealthRing.swift */; };
 		DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DB0E891D2A10109F00D34E9A /* trees.xcdatamodeld */; };
+		DB0E89262A110BCA00D34E9A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E89252A110BCA00D34E9A /* OnboardingView.swift */; };
+		DB1FB2022A112E6700D2448F /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1FB2012A112E6700D2448F /* CloudKit.swift */; };
+		DBA041A72A115318004F4A23 /* BadgeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA041A62A115318004F4A23 /* BadgeModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,9 @@
 		62B3F0DD2A0E90D9002F544B /* HealthRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRing.swift; sourceTree = "<group>"; };
 		DB0E891E2A10109F00D34E9A /* trees.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = trees.xcdatamodel; sourceTree = "<group>"; };
 		DB0E89202A1010C300D34E9A /* trees.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = trees.entitlements; sourceTree = "<group>"; };
+		DB0E89252A110BCA00D34E9A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		DB1FB2012A112E6700D2448F /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
+		DBA041A62A115318004F4A23 /* BadgeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,9 @@
 			children = (
 				0D027BFA2A08C2DD00F5BBBD /* UserData.swift */,
 				62B2D9CD2A11507600E5C4A8 /* Alarms.swift */,
+				0DF4EBE52A0E82E60075D3DC /* Bedges.swift */,
+				DB1FB2012A112E6700D2448F /* CloudKit.swift */,
+				DBA041A62A115318004F4A23 /* BadgeModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +184,7 @@
 				0D027BC82A08C05A00F5BBBD /* MainView.swift */,
 				0D027BF62A08C10300F5BBBD /* AnimalView.swift */,
 				0DF4EBDC2A0CC7660075D3DC /* AlarmListView.swift */,
+				DB0E89252A110BCA00D34E9A /* OnboardingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -332,9 +342,12 @@
 				0DF4EBDB2A0CBF390075D3DC /* BackGroundView.swift in Sources */,
 				0D027BFB2A08C2DD00F5BBBD /* UserData.swift in Sources */,
 				0D027C042A0B7D8700F5BBBD /* Clouds.swift in Sources */,
+				DB0E89262A110BCA00D34E9A /* OnboardingView.swift in Sources */,
 				0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */,
 				0D027BD02A08C05C00F5BBBD /* Persistence.swift in Sources */,
 				0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */,
+				DBA041A72A115318004F4A23 /* BadgeModel.swift in Sources */,
+				DB1FB2022A112E6700D2448F /* CloudKit.swift in Sources */,
 				0D027BF72A08C10300F5BBBD /* AnimalView.swift in Sources */,
 				0DF4EBDD2A0CC7660075D3DC /* AlarmListView.swift in Sources */,
 				DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */,
@@ -505,6 +518,7 @@
 				DEVELOPMENT_TEAM = YZCVM66B66;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = trees/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -535,6 +549,7 @@
 				DEVELOPMENT_TEAM = YZCVM66B66;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = trees/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

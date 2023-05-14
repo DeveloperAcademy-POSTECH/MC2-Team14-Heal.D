@@ -13,14 +13,13 @@ struct MainView: View {
     @State var array: [Int] = [1,2,3,3,4,5,2,3,4,5]
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                BackgroundView()
-                Plant
-                MileStone
-                Buttons
-                BottomSlider
-            }
+        
+        ZStack {
+            BackgroundView()
+            Plant
+            MileStone
+            Buttons
+            BottomSlider
         }
     }
     

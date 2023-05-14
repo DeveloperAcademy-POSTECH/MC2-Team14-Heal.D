@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Badges" representedClassName="Badges" syncable="YES" codeGenerationType="class">
-        <attribute name="badge1" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="badge2" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    <entity name="Badge" representedClassName="Badge" syncable="YES" codeGenerationType="class">
+        <attribute name="badge1" optional="YES" attributeType="Transformable" customClassName="BadgeModel"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Users" inverseName="badge" inverseEntity="Users"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="badge" inverseEntity="User"/>
     </entity>
-    <entity name="Grows" representedClassName="Grows" syncable="YES" codeGenerationType="class">
-        <attribute name="growDay" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    <entity name="Grow" representedClassName="Grow" syncable="YES" codeGenerationType="class">
+        <attribute name="day" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="plant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Plants" inverseName="grows" inverseEntity="Plants"/>
-        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Users" inverseName="grow" inverseEntity="Users"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="grow" inverseEntity="User"/>
     </entity>
-    <entity name="Healths" representedClassName="Healths" syncable="YES" codeGenerationType="class">
+    <entity name="Health" representedClassName="Health" syncable="YES" codeGenerationType="class">
         <attribute name="burnedCalories" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="exerciseTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="numberOfSteps" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Users" inverseName="healths" inverseEntity="Users"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="healths" inverseEntity="User"/>
     </entity>
-    <entity name="Invites" representedClassName="Invites" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="invitee" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Users" inverseName="invitee" inverseEntity="Users"/>
-        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Users" inverseName="inviter" inverseEntity="Users"/>
-    </entity>
-    <entity name="Plants" representedClassName="Plants" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+        <attribute name="code" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="grows" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Grows" inverseName="plant" inverseEntity="Grows"/>
-    </entity>
-    <entity name="Users" representedClassName="Users" syncable="YES" codeGenerationType="class">
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="badge" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Badges" inverseName="user" inverseEntity="Badges"/>
-        <relationship name="familys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Users" inverseName="familys" inverseEntity="Users"/>
-        <relationship name="grow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Grows" inverseName="users" inverseEntity="Grows"/>
-        <relationship name="healths" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Healths" inverseName="user" inverseEntity="Healths"/>
-        <relationship name="invitee" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invites" inverseName="invitee" inverseEntity="Invites"/>
-        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Invites" inverseName="inviter" inverseEntity="Invites"/>
+        <relationship name="badge" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Badge" inverseName="user" inverseEntity="Badge"/>
+        <relationship name="familys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="familys" inverseEntity="User"/>
+        <relationship name="grow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Grow" inverseName="user" inverseEntity="Grow"/>
+        <relationship name="healths" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Health" inverseName="user" inverseEntity="Health"/>
+        <relationship name="invitees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="invitees" inverseEntity="User"/>
     </entity>
 </model>

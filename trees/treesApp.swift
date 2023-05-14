@@ -13,8 +13,8 @@ struct treesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView()
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            OnboardingView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
