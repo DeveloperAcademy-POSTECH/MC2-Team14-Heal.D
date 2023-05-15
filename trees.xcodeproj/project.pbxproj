@@ -174,6 +174,7 @@
 		0D027BF82A08C2B800F5BBBD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DB8E4D8C2A120FCF00C71091 /* Domain */,
 				0D027BFA2A08C2DD00F5BBBD /* UserData.swift */,
 				62B2D9CD2A11507600E5C4A8 /* Alarms.swift */,
 				DB1FB2012A112E6700D2448F /* CloudKit.swift */,
@@ -215,6 +216,13 @@
 				62B3F0DD2A0E90D9002F544B /* HealthRing.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		DB8E4D8C2A120FCF00C71091 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Domain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

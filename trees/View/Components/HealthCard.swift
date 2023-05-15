@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HealthCard: View {
+    
+    let user: User?
+    
     @EnvironmentObject var defaults: DefaultMission
     
     var body: some View {
@@ -16,7 +19,7 @@ struct HealthCard: View {
                 .cornerRadius(15)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("이름")
+                    Text(user?.name ?? "Empty")
                         .foregroundColor(.white)
                         .font(.system(size: 17))
                     Spacer()
@@ -42,4 +45,8 @@ struct HealthCard: View {
     }
 }
 
-
+struct CardView_Preview: PreviewProvider {
+    static var previews: some View {
+        HealthCard()
+    }
+}

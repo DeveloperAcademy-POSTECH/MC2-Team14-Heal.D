@@ -10,19 +10,27 @@ import CoreData
 
 struct MainView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @AppStorage("isFirst") var isFirst: Bool = true
+    
     @StateObject var defaults: DefaultMission = DefaultMission()
-    @AppStorage("_isFirstLaunching") var isFirstLaunching: Bool = true
     @State var showSheet: Bool = false
-    @State var array: [Int] = [1,2,3,3,4,5,2,3,4,5]
     @State var showAddAlert: Bool = false
     @State var showExitAlert: Bool = false
     @State var userName: String = ""
     
-    @FetchRequest(
-        entity: User.entity(),
-        sortDescriptors: []
-    )
+    let userId: String
+    
+    @FetchRequest
     var user: FetchedResults<User>
+    
+    init(userId: String) {
+        _user = FetchRequest(
+            entity: User.entity(),
+            sortDescriptors: [],
+            predicate: NSPredicate(format: "id == %@", userId)
+        )
+        self.userId = userId
+    }
     
     var body: some View {
         ZStack {
@@ -31,6 +39,10 @@ struct MainView: View {
             MileStone
             Buttons
             BottomSlider
+        }
+        .fullScreenCover(isPresented: $isFirst) {
+            OnboardingView(isFirst: $isFirst, userId: userId)
+                .environment(\.managedObjectContext, viewContext)
         }
     }
 
@@ -190,7 +202,8 @@ struct MainView: View {
                         .resizable()
                         .frame(width: 35, height: 35)
                 }.sheet(isPresented: $showSheet) {
-                    AnimalView(badge: user.first!.badge!)
+                    AnimalView(user: user.first ?? User())
+                        .environment(\.managedObjectContext, viewContext)
                         .presentationDetents([.fraction(0.4)])
                         .presentationDragIndicator(.visible)
                 }
@@ -216,11 +229,5 @@ struct MainView: View {
             scale = 1 + (90 - diff) / 500
         }
         return scale
-    }
-}
-
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
     }
 }

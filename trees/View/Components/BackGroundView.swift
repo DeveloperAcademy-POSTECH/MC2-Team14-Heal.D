@@ -31,7 +31,7 @@ struct BackgroundView: View {
                             .animation(.linear(duration: 30).repeatForever(autoreverses: false), value: isAnimation)
                     }
                     .onAppear {
-                        isAnimation.toggle()
+                        isAnimation = true
                     }
                 }.frame(width: width, height: height * 0.68)
                 Image("ground").resizable().scaledToFill()

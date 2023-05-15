@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Badge" representedClassName="Badge" syncable="YES" codeGenerationType="class">
-        <attribute name="badges" optional="YES" attributeType="Transformable" customClassName="[BadgeModel]"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="badge" inverseEntity="User"/>
-    </entity>
     <entity name="Grow" representedClassName="Grow" syncable="YES" codeGenerationType="class">
         <attribute name="day" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -20,10 +15,10 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="healths" inverseEntity="User"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+        <attribute name="badges" optional="YES" attributeType="Transformable" customClassName="[BadgeModel]"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="badge" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Badge" inverseName="user" inverseEntity="Badge"/>
         <relationship name="familys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="familys" inverseEntity="User"/>
         <relationship name="grow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Grow" inverseName="user" inverseEntity="Grow"/>
         <relationship name="healths" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Health" inverseName="user" inverseEntity="Health"/>

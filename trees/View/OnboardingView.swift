@@ -12,71 +12,52 @@ import CoreData
 struct OnboardingView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var text: String = ""
+    @Binding var isFirst: Bool
     
-    @FetchRequest
-    var users: FetchedResults<User>
+    let userId: String
     
     var body: some View {
         VStack(spacing: 30) {
             TextEditor(text: $text)
                 .background(.yellow)
-            
-            List {
-                ForEach(users, id: \.self) { user in
-                    Text(user.name!)
-                }
+            Button {
+                initialize(name: text)
+                isFirst.toggle()
+            } label: {
+                Text("Start!")
             }
             
             Button {
-                initialize(name: text)
+                CloudKitNotification.shared.requestNotificationPermission()
+                CloudKitNotification.shared.subcribeToNotifications(userId: userId)
             } label: {
-                Text("Start!")
+                Text("subscriptions")
             }
         }
         .font(.title3)
         .fontWeight(.semibold)
     }
     
-    init() {
-        _users = FetchRequest<User>(
-            entity: User.entity(),
-            sortDescriptors: []
-//            predicate: NSPredicate(format: "code == %@", "9B1B6E")
-        )
-    }
-    
     private func initialize(name: String) {
         let user = User(context: viewContext)
-        user.id = CloudKitUserInfo.shared.id
+        user.id = userId
         user.name = name
         user.code = String(UUID().uuidString.prefix(6))
+        user.badges = []
+        for name in BadgeModel.names {
+            user.badges!.append(BadgeModel(name: name, isOn: false, isLock: false))
+        }
         
         let grow = Grow(context: viewContext)
         grow.id = UUID()
         grow.day = 1
         grow.level = 1
         
-        let badge = Badge(context: viewContext)
-        badge.id = UUID()
-        badge.badges = []
-        for name in BadgeModel.names {
-            badge.badges!.append(BadgeModel(name: name))
-        }
-        
-        user.badge = badge
         user.grow = grow
         user.familys = [user]
         
         grow.user = user
         
-        badge.user = user
-        
         try? viewContext.save()
-    }
-}
-
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
     }
 }

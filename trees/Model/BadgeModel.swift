@@ -11,7 +11,7 @@ import CoreData
 public class BadgeModel: NSObject, NSSecureCoding {
     public static var supportsSecureCoding: Bool = true
     
-    init(name: String = "", isOn: Bool = false, isLock: Bool = false) {
+    init(name: String = "", isOn: Bool = false, isLock: Bool = true) {
         self.name = name
         self.isOn = isOn
         self.isLock = isLock
@@ -30,8 +30,8 @@ public class BadgeModel: NSObject, NSSecureCoding {
     }
     
     var name = ""
-    var isOn: Bool = false
-    var isLock = false
+    var isOn = false
+    var isLock = true
 }
 
 
