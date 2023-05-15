@@ -24,7 +24,7 @@ struct PersistenceController {
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
         
-        let options = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.it794613.trees")
+        let options = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jinyong.trees")
         options.databaseScope = .public
         
         description.cloudKitContainerOptions = options

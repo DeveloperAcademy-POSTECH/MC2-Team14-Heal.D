@@ -1,13 +1,13 @@
 //
-//  HealthCard.swift
+//  FamilyCard.swift
 //  trees
 //
-//  Created by 최진용 on 2023/05/11.
+//  Created by 최진용 on 2023/05/16.
 //
 
 import SwiftUI
 
-struct HealthCard: View {
+struct FamilyCard: View {
     @EnvironmentObject var defaults: DefaultMission
     
     var body: some View {
@@ -16,17 +16,17 @@ struct HealthCard: View {
                 .cornerRadius(15)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("이름")
+                    Text("가족")
                         .foregroundColor(.white)
                         .font(.system(size: 17))
                     Spacer()
-                    Text("걸음수 1000/\(defaults.defaultWalk)")
+                    Text("걸음수 \(defaults.defaultWalk)/20000")
                         .foregroundColor(Color("lightRed"))
                         .font(.system(size: 14))
-                    Text("칼로리 1200/\(defaults.defaultCalories)")
+                    Text("칼로리 \(defaults.defaultCalories)/3000")
                         .foregroundColor(Color("lightGreen"))
                         .font(.system(size: 14))
-                    Text("운동시간 10/\(defaults.defaultExerciseTime)")
+                    Text("운동시간 \(defaults.defaultExerciseTime)/30")
                         .foregroundColor(Color("lightBlue"))
                         .font(.system(size: 14))
                     Spacer()
@@ -42,4 +42,9 @@ struct HealthCard: View {
     }
 }
 
+struct CardView_Preview: PreviewProvider {
+    static var previews: some View {
+        HealthCard()
+    }
+}
 

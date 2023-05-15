@@ -11,16 +11,16 @@ struct Ring: View {
     @Binding var progress: CGFloat
     
     enum RingDiameter: CGFloat { // 원 중점 위치, 지름을 늘리고 줄이면서 원의 시작위치를 바꿈
-        case small = 0.1
-        case medium = 0.2
-        case big = 0.3
+        case small = 0.08
+        case medium = 0.18
+        case big = 0.28
         case calculated = 0.4
     }
     
     let ringDia: RingDiameter
     
     private var fullCircleDotOffset: CGFloat { return 350 *  -ringDia.rawValue / 2 }
-    private let ringThickness: CGFloat = 15.0 // 두께
+    private let ringThickness: CGFloat = 14.3 // 두께
     
     private var ringColor: [Color] {
         get {
