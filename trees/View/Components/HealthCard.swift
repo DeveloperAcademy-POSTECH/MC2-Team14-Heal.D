@@ -9,9 +9,10 @@ import SwiftUI
 
 struct HealthCard: View {
     
-    let user: User?
+    @Binding var user: User?
+    @Binding var healths: [Health]
     
-    @EnvironmentObject var defaults: DefaultMission
+    @EnvironmentObject var defaultMission: DefaultMission
     
     var body: some View {
         ZStack() {
@@ -19,17 +20,17 @@ struct HealthCard: View {
                 .cornerRadius(15)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(user?.name ?? "Empty")
+                    Text(user?.name ?? "None")
                         .foregroundColor(.white)
                         .font(.system(size: 17))
                     Spacer()
-                    Text("걸음수 1000/\(defaults.defaultWalk)")
+                    Text("걸음수 \(healths.first?.numberOfSteps ?? 0)/\(defaultMission.defaultWalk)")
                         .foregroundColor(Color("lightRed"))
                         .font(.system(size: 14))
-                    Text("칼로리 1200/\(defaults.defaultCalories)")
+                    Text("칼로리 \(healths.first?.burnedCalories ?? 0)/\(defaultMission.defaultCalories)")
                         .foregroundColor(Color("lightGreen"))
                         .font(.system(size: 14))
-                    Text("운동시간 10/\(defaults.defaultExerciseTime)")
+                    Text("운동시간 \(healths.first?.exerciseTime ?? 0)/\(defaultMission.defaultExerciseTime)")
                         .foregroundColor(Color("lightBlue"))
                         .font(.system(size: 14))
                     Spacer()

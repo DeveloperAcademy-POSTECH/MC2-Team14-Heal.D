@@ -14,14 +14,15 @@ struct MainView: View {
     @AppStorage("isFirst") var isFirst: Bool = true
     
     @StateObject var healthData: HealthData = HealthData()
-    @StateObject var defaults: DefaultMission = DefaultMission()
+    @StateObject var defaultMission: DefaultMission = DefaultMission()
     @State private var showSheet: Bool = false
     @State private var showAddAlert: Bool = false
     @State private var showExitAlert: Bool = false
     @State private var inviteCode: String = ""
     
-    let userId: String
-    @Binding var users: [User]
+    @Binding var userId: String
+    @State private var user: User?
+    @State private var coreDataHealths: [Health]  = []
     
     var body: some View {
         ZStack {
@@ -30,11 +31,6 @@ struct MainView: View {
             MileStone
             Buttons
             BottomSlider
-        }
-        .onAppear {
-            let request = User.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", userId)
-            users = try! viewContext.fetch(request)
         }
         .fullScreenCover(isPresented: $isFirst) {
             OnboardingView(isFirst: $isFirst, userId: userId)
@@ -46,7 +42,7 @@ struct MainView: View {
     
     //MARK: - Components
     var Plant: some View {
-        Image("day" + String(users.first?.grow?.day ?? 1)).offset(y: 30)
+        Image("day" + String(user?.grow?.day ?? 1)).offset(y: 30)
     }
     
     var MileStone: some View {
@@ -56,7 +52,7 @@ struct MainView: View {
             .offset(x:120, y: 115)
             .overlay {
                 VStack{
-                    Text(String(users.first?.grow?.day ?? 1) + "/30")
+                    Text(String(user?.grow?.day ?? 1) + "/30")
                         .foregroundStyle(
                             .white.gradient
                                 .shadow(.inner(color: .black, radius: 0, x: 1, y: 1))
@@ -74,21 +70,16 @@ struct MainView: View {
             ScrollViewReader { reader in
                 ScrollView(.horizontal) {
                     HStack(spacing: 5) {
-                        if (users.first?.familys?.count == 0) {
-                            ForEach(-1...(users.first?.familys?.count ?? -1), id: \.self) { num in
+                        if (user?.familys?.count == 1) {
+                            ForEach(0...1, id: \.self) { num in
                                 GeometryReader { proxy in
                                     let scale = getScale(proxy: proxy)
-                                    let endIdx = users.first?.familys?.count
-                                    if num == endIdx {
+                                    if num == 1 {
                                         AddPersonButton
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
-                                    else if num ==  -1 {
-                                        ExitFamilyButton
-                                            .scaleEffect(CGSize(width: scale, height: scale))
-                                    }
                                     else {
-                                        HealthCard(user: users.first)
+                                        HealthCard(user: $user, healths: $coreDataHealths)
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                 }
@@ -97,10 +88,10 @@ struct MainView: View {
                             .padding(.trailing, 20)
                         }
                         else {
-                            ForEach(-2...(users.first?.familys?.count ?? -2), id: \.self) { num in
+                            ForEach(-2...(user?.familys?.count ?? -2), id: \.self) { num in
                                 GeometryReader { proxy in
                                     let scale = getScale(proxy: proxy)
-                                    let endIdx = users.first?.familys?.count
+                                    let endIdx = user?.familys?.count
                                     if num == endIdx {
                                         AddPersonButton
                                             .scaleEffect(CGSize(width: scale, height: scale))
@@ -113,7 +104,7 @@ struct MainView: View {
                                         FamilyCard().scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else {
-                                        HealthCard(user: users.first)
+                                        HealthCard(user: $user, healths: $coreDataHealths)
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                 }
@@ -122,15 +113,37 @@ struct MainView: View {
                             .padding(.trailing, 20)
                         }
                     }
-                    .environmentObject(defaults)
+                    .environmentObject(defaultMission)
                     .padding(.leading, 60)
                     .padding(.trailing, 40)
                     .padding(.vertical, 30)
                 }
                 .onAppear {
+                    let request = User.fetchRequest()
+                    request.predicate = NSPredicate(format: "id == %@", userId)
+                    user = try! viewContext.fetch(request).first
+                    coreDataHealths = user?.healths?.allObjects as! [Health]
+                    
+                    
                     healthData.HealthAuth()
+                    
+                    let now = Date()
+                    let nowComponent = Calendar.current.dateComponents([.year, .month, .day], from: now)
+                    
+                    if let todayCoreDataHealth = coreDataHealths.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:$0.date!) == nowComponent }) {
+                        
+                    }
+                    
+                    let coreDataHealth = Health(context: viewContext)
+                    coreDataHealth.id = UUID()
+                    coreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
+                    coreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
+                    coreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
+                    coreDataHealth.date = Date()
+                    coreDataHealth.user = user
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        if users.first?.familys?.count == 1 {
+                        if user?.familys?.count == 1 {
                             reader.scrollTo(0, anchor: .center)
                         } else {
                             reader.scrollTo(-1, anchor: .center)
@@ -199,7 +212,7 @@ struct MainView: View {
                         .resizable()
                         .frame(width: 35, height: 35)
                 }.sheet(isPresented: $showSheet) {
-                    AnimalView(user: users.first ?? User())
+                    AnimalView(user: user ?? User())
                         .environment(\.managedObjectContext, viewContext)
                         .presentationDetents([.fraction(0.4)])
                         .presentationDragIndicator(.visible)

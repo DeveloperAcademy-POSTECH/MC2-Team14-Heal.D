@@ -10,9 +10,9 @@ import HealthKit
 
 class HealthData: ObservableObject {
     var healthStore: HKHealthStore? = nil
-    @Published var todayStepCount = 0.0
-    @Published var todayActiveEnergy = 0.0
-    @Published var todayExerciseTime = 0.0
+    @Published var numberOfSteps = 0
+    @Published var burnedCalories = 0
+    @Published var exerciseTime = 0
     
     func HealthAuth() {
         guard HKHealthStore.isHealthDataAvailable() else { fatalError("This app requires a device that supports HealthKit") }
@@ -51,7 +51,7 @@ class HealthData: ObservableObject {
         
         let today = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
         let sortByDate = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        var stepCountSum = Double()
+        var numberOfSteps = Double()
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: today, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortByDate]) {
             query, results, error in
@@ -62,14 +62,14 @@ class HealthData: ObservableObject {
             }
             
             for sample in samples {
-                stepCountSum += sample.quantity.doubleValue(for: .count())
+                numberOfSteps += sample.quantity.doubleValue(for: .count())
             }
             
             // The results come back on an anonymous background queue.
             // Dispatch to the main queue before modifying the UI.
             
             DispatchQueue.main.async {
-                self.todayStepCount = stepCountSum
+                self.numberOfSteps = Int(numberOfSteps)
             }
         }
         
@@ -93,7 +93,7 @@ class HealthData: ObservableObject {
         
         let today = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
         let sortByDate = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        var activeEnergySum = Double()
+        var burnedCalories = Double()
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: today, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortByDate]) {
             query, results, error in
@@ -104,14 +104,14 @@ class HealthData: ObservableObject {
             }
             
             for sample in samples {
-                activeEnergySum += sample.quantity.doubleValue(for: .kilocalorie())
+                burnedCalories += sample.quantity.doubleValue(for: .kilocalorie())
             }
             
             // The results come back on an anonymous background queue.
             // Dispatch to the main queue before modifying the UI.
             
             DispatchQueue.main.async {
-                self.todayActiveEnergy = activeEnergySum
+                self.burnedCalories = Int(burnedCalories)
             }
         }
         
@@ -135,7 +135,7 @@ class HealthData: ObservableObject {
         
         let today = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
         let sortByDate = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        var exerciseTimeSum = Double()
+        var exerciseTime = Double()
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: today, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortByDate]) {
             query, results, error in
@@ -146,14 +146,14 @@ class HealthData: ObservableObject {
             }
             
             for sample in samples {
-                exerciseTimeSum += sample.quantity.doubleValue(for: .minute())
+                exerciseTime += sample.quantity.doubleValue(for: .minute())
             }
             
             // The results come back on an anonymous background queue.
             // Dispatch to the main queue before modifying the UI.
             
             DispatchQueue.main.async {
-                self.todayExerciseTime = exerciseTimeSum
+                self.exerciseTime = Int(exerciseTime)
             }
         }
         

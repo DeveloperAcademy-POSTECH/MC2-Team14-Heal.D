@@ -65,11 +65,6 @@ class CloudKitNotification {
             }
             
             if let recordId = recordId {
-//                let viewContext = PersistenceController.shared.container.viewContext
-//                let request: NSFetchRequest<User> = User.fetchRequest()
-//                request.predicate = predicate
-//                let users = try? viewContext.fetch(request)
-
                 let predicate = NSPredicate(format: "CD_id == %@", recordId.recordName)
                 let query = CKQuery(recordType: "CD_User", predicate: predicate)
                 self.database.fetch(withQuery: query, resultsLimit: 1) { result in
@@ -81,7 +76,7 @@ class CloudKitNotification {
                     switch result {
                     case .success(let cursor):
                         if let result = cursor.matchResults.first?.0 {
-                            let predicate = NSPredicate(format: "(CD_recordNames BEGINSWITH %@) AND (CD_relationships == %@)", ":\(result.recordName)", "invitees:invitees")
+                            let predicate = NSPredicate(format: "(self CONTAINS %@) AND (CD_relationships == %@)", "CD_recordNames", ":\(result.recordName)", "invitees:invitees")
                             let subscription = CKQuerySubscription(recordType: "CDMR", predicate: predicate, subscriptionID: "invite_user", options: .firesOnRecordCreation)
                             
                             let notification = CKSubscription.NotificationInfo()
