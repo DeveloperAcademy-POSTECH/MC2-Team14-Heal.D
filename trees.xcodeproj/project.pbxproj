@@ -32,6 +32,7 @@
 		DB0E89262A110BCA00D34E9A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0E89252A110BCA00D34E9A /* OnboardingView.swift */; };
 		DB1FB2022A112E6700D2448F /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1FB2012A112E6700D2448F /* CloudKit.swift */; };
 		DB6412F52A117519009E0328 /* BadgeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6412F42A117519009E0328 /* BadgeModel.swift */; };
+		DB65CD982A12B3B60062733E /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65CD972A12B3B60062733E /* HealthData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		DB0E89252A110BCA00D34E9A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		DB1FB2012A112E6700D2448F /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		DB6412F42A117519009E0328 /* BadgeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeModel.swift; sourceTree = "<group>"; };
+		DB65CD972A12B3B60062733E /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 		DB8E4D8C2A120FCF00C71091 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				DB65CD972A12B3B60062733E /* HealthData.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				0D027BF72A08C10300F5BBBD /* AnimalView.swift in Sources */,
 				0DF4EBDD2A0CC7660075D3DC /* AlarmListView.swift in Sources */,
 				DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */,
+				DB65CD982A12B3B60062733E /* HealthData.swift in Sources */,
 				0D027BC92A08C05A00F5BBBD /* MainView.swift in Sources */,
 				62B3F0DE2A0E90D9002F544B /* HealthRing.swift in Sources */,
 				62B2D9CE2A11507600E5C4A8 /* Alarms.swift in Sources */,
@@ -535,10 +539,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"trees/Preview Content\"";
-				DEVELOPMENT_TEAM = YPDFZL299R;
+				DEVELOPMENT_TEAM = YZCVM66B66;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = trees/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "헬스 데이터를 불러오기 위해 사용";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "헬스 데이터를 저장하기 위해 사용";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -549,7 +555,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinyong.trees;
+				PRODUCT_BUNDLE_IDENTIFIER = it794613.trees;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -568,10 +574,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"trees/Preview Content\"";
-				DEVELOPMENT_TEAM = YPDFZL299R;
+				DEVELOPMENT_TEAM = YZCVM66B66;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = trees/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "헬스 데이터를 불러오기 위해 사용";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "헬스 데이터를 저장하기 위해 사용";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -582,7 +590,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinyong.trees;
+				PRODUCT_BUNDLE_IDENTIFIER = it794613.trees;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

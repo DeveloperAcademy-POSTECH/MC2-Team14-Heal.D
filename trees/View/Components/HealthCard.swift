@@ -44,9 +44,3 @@ struct HealthCard: View {
         }
     }
 }
-
-struct CardView_Preview: PreviewProvider {
-    static var previews: some View {
-        HealthCard()
-    }
-}

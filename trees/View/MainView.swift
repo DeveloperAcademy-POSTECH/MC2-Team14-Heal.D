@@ -10,27 +10,18 @@ import CoreData
 
 struct MainView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    
     @AppStorage("isFirst") var isFirst: Bool = true
     
+    @StateObject var healthData: HealthData = HealthData()
     @StateObject var defaults: DefaultMission = DefaultMission()
-    @State var showSheet: Bool = false
-    @State var showAddAlert: Bool = false
-    @State var showExitAlert: Bool = false
-    @State var userName: String = ""
+    @State private var showSheet: Bool = false
+    @State private var showAddAlert: Bool = false
+    @State private var showExitAlert: Bool = false
+    @State private var inviteCode: String = ""
     
     let userId: String
-    
-    @FetchRequest
-    var user: FetchedResults<User>
-    
-    init(userId: String) {
-        _user = FetchRequest(
-            entity: User.entity(),
-            sortDescriptors: [],
-            predicate: NSPredicate(format: "id == %@", userId)
-        )
-        self.userId = userId
-    }
+    @Binding var users: [User]
     
     var body: some View {
         ZStack {
@@ -40,17 +31,22 @@ struct MainView: View {
             Buttons
             BottomSlider
         }
+        .onAppear {
+            let request = User.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", userId)
+            users = try! viewContext.fetch(request)
+        }
         .fullScreenCover(isPresented: $isFirst) {
             OnboardingView(isFirst: $isFirst, userId: userId)
                 .environment(\.managedObjectContext, viewContext)
         }
     }
-
-
+    
+    
     
     //MARK: - Components
     var Plant: some View {
-        Image("day" + String(user.first?.grow?.day ?? 1)).offset(y: 30)
+        Image("day" + String(users.first?.grow?.day ?? 1)).offset(y: 30)
     }
     
     var MileStone: some View {
@@ -60,7 +56,7 @@ struct MainView: View {
             .offset(x:120, y: 115)
             .overlay {
                 VStack{
-                    Text(String(user.first?.grow?.day ?? 1) + "/30")
+                    Text(String(users.first?.grow?.day ?? 1) + "/30")
                         .foregroundStyle(
                             .white.gradient
                                 .shadow(.inner(color: .black, radius: 0, x: 1, y: 1))
@@ -77,67 +73,68 @@ struct MainView: View {
             Spacer()
             ScrollViewReader { reader in
                 ScrollView(.horizontal) {
-                HStack(spacing: 5) {
-                    if user.first?.familys?.count == 0 {
-                        ForEach(-1...user.first!.familys!.count, id: \.self) { num in
-                            GeometryReader { proxy in
-                                let scale = getScale(proxy: proxy)
-                                let endIdx = user.first?.familys?.count
-                                if num == endIdx {
-                                    AddPersonButton
-                                        .scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                                else if num ==  -1 {
-                                    ExitFamilyButton
-                                        .scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                                else {
-                                    HealthCard()
-                                        .scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                            }
-                        }
-                        .frame(width: 270, height: 140)
-                        .padding(.trailing, 20)
-                    }
-                    else {
-                        ForEach(-2...user.first!.familys!.count, id: \.self) { num in
-                            GeometryReader { proxy in
-                                let scale = getScale(proxy: proxy)
-                                let endIdx = user.first?.familys?.count
-                                if num == endIdx {
-                                    AddPersonButton
-                                        .scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                                else if num ==  -2 {
-                                    ExitFamilyButton
-                                        .scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                                else if num == -1 {
-                                    FamilyCard().scaleEffect(CGSize(width: scale, height: scale))
-                                }
-                                else {
-                                    HealthCard()
-                                        .scaleEffect(CGSize(width: scale, height: scale))
+                    HStack(spacing: 5) {
+                        if (users.first?.familys?.count == 0) {
+                            ForEach(-1...(users.first?.familys?.count ?? -1), id: \.self) { num in
+                                GeometryReader { proxy in
+                                    let scale = getScale(proxy: proxy)
+                                    let endIdx = users.first?.familys?.count
+                                    if num == endIdx {
+                                        AddPersonButton
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                    else if num ==  -1 {
+                                        ExitFamilyButton
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                    else {
+                                        HealthCard(user: users.first)
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
                                 }
                             }
+                            .frame(width: 270, height: 140)
+                            .padding(.trailing, 20)
                         }
-                        .frame(width: 270, height: 140)
-                        .padding(.trailing, 20)
+                        else {
+                            ForEach(-2...(users.first?.familys?.count ?? -2), id: \.self) { num in
+                                GeometryReader { proxy in
+                                    let scale = getScale(proxy: proxy)
+                                    let endIdx = users.first?.familys?.count
+                                    if num == endIdx {
+                                        AddPersonButton
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                    else if num == -2 {
+                                        ExitFamilyButton
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                    else if num == -1 {
+                                        FamilyCard().scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                    else {
+                                        HealthCard(user: users.first)
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }
+                                }
+                            }
+                            .frame(width: 270, height: 140)
+                            .padding(.trailing, 20)
+                        }
                     }
+                    .environmentObject(defaults)
+                    .padding(.leading, 60)
+                    .padding(.trailing, 40)
+                    .padding(.vertical, 30)
                 }
-                .environmentObject(defaults)
-                .padding(.leading, 60)
-                .padding(.trailing, 40)
-                .padding(.vertical, 30)
-            }
                 .onAppear {
-                    if user.first?.familys?.count == 0 {
-                        reader.scrollTo(0, anchor: .center)
-                        print(user.first?.familys?.count)
-                    } else {
-                        reader.scrollTo(-1, anchor: .center)
-                        print(user.first?.familys?.count)
+                    healthData.HealthAuth()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        if users.first?.familys?.count == 1 {
+                            reader.scrollTo(0, anchor: .center)
+                        } else {
+                            reader.scrollTo(-1, anchor: .center)
+                        }
                     }
                 }
             }
@@ -185,7 +182,7 @@ struct MainView: View {
                 }
                 //MARK: -여기에 func 밑에서 메소드로 만들어서 넣어주기
                 .alert("팀 초대", isPresented: $showAddAlert) {
-                    TextField("초대 코드를 입력해주세요", text: $userName)
+                    TextField("초대 코드를 입력해주세요", text: $inviteCode)
                     Button("Cancel", role: .cancel, action: {})
                     Button("OK", action: {})
                 }
@@ -202,7 +199,7 @@ struct MainView: View {
                         .resizable()
                         .frame(width: 35, height: 35)
                 }.sheet(isPresented: $showSheet) {
-                    AnimalView(user: user.first ?? User())
+                    AnimalView(user: users.first ?? User())
                         .environment(\.managedObjectContext, viewContext)
                         .presentationDetents([.fraction(0.4)])
                         .presentationDragIndicator(.visible)

@@ -10,32 +10,87 @@ import CloudKit
 import CoreData
 
 struct OnboardingView: View {
+    enum OnboardingState {
+        case start
+        case apply
+    }
+    
     @Environment(\.managedObjectContext) private var viewContext
-    @State private var text: String = ""
+    @State var userName: String = ""
+    @State var onboardingState = OnboardingState.start
     @Binding var isFirst: Bool
     
     let userId: String
     
     var body: some View {
-        VStack(spacing: 30) {
-            TextEditor(text: $text)
-                .background(.yellow)
-            Button {
-                initialize(name: text)
-                isFirst.toggle()
-            } label: {
-                Text("Start!")
-            }
-            
-            Button {
-                CloudKitNotification.shared.requestNotificationPermission()
-                CloudKitNotification.shared.subcribeToNotifications(userId: userId)
-            } label: {
-                Text("subscriptions")
-            }
+        ZStack {
+            BackgroundView()
+            Image("onboardingTitle")
+                .offset(y: -200)
+            upperSign
+            lowerSign
         }
-        .font(.title3)
-        .fontWeight(.semibold)
+    }
+    
+    var upperSign: some View {
+        ZStack {
+            Image("onboardingStart")
+                .offset(y: onboardingState == .start ? 250 : 100)
+                .animation(.linear(duration: 0.5), value: onboardingState)
+                .onTapGesture {
+                    onboardingState = .apply
+                }
+            
+            Image("onboardingSign")
+                .overlay {
+                    textField
+                }
+                .offset(y: onboardingState == .start ? 250 : 100)
+                .animation(.linear(duration: 0.5), value: onboardingState)
+                .opacity(onboardingState == .start ? 0.0 : 1.0)
+        }
+    }
+    
+    var lowerSign: some View {
+        Image("onboardingApply")
+            .offset(y: userName == "" ? 500 : 250)
+            .animation(.linear(duration: 0.5), value: userName == "")
+            .onTapGesture {
+                initialize(name: userName)
+                CloudKitNotification.shared.requestNotificationPermission()
+                CloudKitNotification.shared.subcribeToNotifications()
+                isFirst.toggle()
+            }
+    }
+    
+    var textField: some View {
+        ZStack {
+            Rectangle()
+                .fill(.shadow(.inner(radius: 2, x: 1, y: 1)))
+                .foregroundColor(Color("onboardingColor"))
+                .frame(width: 250, height: 40)
+            
+                .overlay {
+                    TextField(text: $userName) {
+                        Text("이름을 입력해주세요!")
+                            .foregroundColor(Color("onboardingPlaceholder"))
+                            .font(.system(size: 24, weight: .heavy))
+                    }
+                    .foregroundColor(.clear)
+                    .font(.system(size: 24, weight: .heavy))
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+                    .padding(.leading, 10)
+                    
+                    Text(userName)
+                        .foregroundStyle(
+                            .shadow(.inner(radius: 0, x: 1, y: 1)))
+                        .font(.system(size: 24, weight: .heavy))
+                        .foregroundColor(Color("onboardingText"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 10)
+                }
+        }
     }
     
     private func initialize(name: String) {
