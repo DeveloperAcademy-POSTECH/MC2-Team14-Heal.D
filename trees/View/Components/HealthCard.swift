@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct HealthCard: View {
-    
     @Binding var user: User?
     @ObservedObject var healthData: HealthData
     @EnvironmentObject var defaultMission: DefaultMission
+    
+    @State var bigProgress: CGFloat = 0.0
+    @State var mediumProgress: CGFloat = 0.0
+    @State var smallProgress: CGFloat = 0.0
     
     var body: some View {
         ZStack() {
@@ -35,10 +38,14 @@ struct HealthCard: View {
                     Spacer()
                 }
                 Spacer()
-                HealthRing(big: .constant(0.1), medium: .constant(0.5), small: .constant(0.5))
+                HealthRing(big: $bigProgress, medium: $mediumProgress, small: $smallProgress)
                     .frame(width: 40, height: 40)
                     .padding(.trailing, 30)
-                
+                    .onAppear {
+                        bigProgress = CGFloat(healthData.numberOfSteps) / CGFloat(defaultMission.defaultWalk)
+                        mediumProgress = CGFloat(healthData.burnedCalories) / CGFloat(defaultMission.defaultCalories)
+                        smallProgress = CGFloat(healthData.exerciseTime) / CGFloat(defaultMission.defaultExerciseTime)
+                    }
             }
             .padding()
             
