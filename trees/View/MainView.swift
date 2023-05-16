@@ -230,6 +230,16 @@ struct MainView: View {
         }.padding(.horizontal)
     }
     
+    var Animals: some View {
+        ZStack {
+            ForEach(0..<BadgeModel.names.count, id: \.self) { index in
+                Image(BadgeModel.names[index])
+                    .offset(BadgeModel.offsets[index])
+                    .opacity((user?.badges?[index].isLock ?? true) ? 0.0 : 1.0)
+            }
+        }
+    }
+    
     //MARK: - Methods
     private func getScale(proxy: GeometryProxy) -> CGFloat {
         var scale: CGFloat = 0.8

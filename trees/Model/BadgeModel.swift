@@ -34,7 +34,6 @@ public class BadgeModel: NSObject, NSSecureCoding {
     var isLock = true
 }
 
-
 extension BadgeModel {
     static let names: [String] = [
         "bee",
@@ -47,5 +46,20 @@ extension BadgeModel {
         "robusta",
         "sheep",
         "whiteBird",
+    ]
+}
+
+extension BadgeModel {
+    static let offsets: [CGSize] = [
+        CGSize(width: 50, height: 0),
+        CGSize(width: 100, height: -150),
+        CGSize(width: -50, height: -50),
+        CGSize(width: 100, height: 200),
+        CGSize(width: -100, height: 100),
+        CGSize(width: 0, height: 0),
+        CGSize(width: -100, height: -150),
+        CGSize(width: 50, height: 150),
+        CGSize(width: -100, height: 100),
+        CGSize(width: -50, height: 100)
     ]
 }
