@@ -25,7 +25,6 @@
 		0DF4EBDF2A0D0ACF0075D3DC /* AlarmListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBDE2A0D0ACF0075D3DC /* AlarmListCell.swift */; };
 		0DF4EBE12A0D14840075D3DC /* Ext+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */; };
 		0DF4EBE42A0D35780075D3DC /* HealthCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF4EBE32A0D35780075D3DC /* HealthCard.swift */; };
-		0DF74F822A120AD500A7581B /* OnBoardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF74F812A120AD500A7581B /* OnBoardingTest.swift */; };
 		62B2D9CE2A11507600E5C4A8 /* Alarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B2D9CD2A11507600E5C4A8 /* Alarms.swift */; };
 		62B3F0DE2A0E90D9002F544B /* HealthRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B3F0DD2A0E90D9002F544B /* HealthRing.swift */; };
 		DB0E891F2A10109F00D34E9A /* trees.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DB0E891D2A10109F00D34E9A /* trees.xcdatamodeld */; };
@@ -75,7 +74,6 @@
 		0DF4EBDE2A0D0ACF0075D3DC /* AlarmListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListCell.swift; sourceTree = "<group>"; };
 		0DF4EBE02A0D14840075D3DC /* Ext+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext+UIScreen.swift"; sourceTree = "<group>"; };
 		0DF4EBE32A0D35780075D3DC /* HealthCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCard.swift; sourceTree = "<group>"; };
-		0DF74F812A120AD500A7581B /* OnBoardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingTest.swift; sourceTree = "<group>"; };
 		62B2D9CD2A11507600E5C4A8 /* Alarms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarms.swift; sourceTree = "<group>"; };
 		62B3F0DD2A0E90D9002F544B /* HealthRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRing.swift; sourceTree = "<group>"; };
 		DB0E891E2A10109F00D34E9A /* trees.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = trees.xcdatamodel; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				0D027BF62A08C10300F5BBBD /* AnimalView.swift */,
 				0DF4EBDC2A0CC7660075D3DC /* AlarmListView.swift */,
 				DB0E89252A110BCA00D34E9A /* OnboardingView.swift */,
-				0DF74F812A120AD500A7581B /* OnBoardingTest.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -358,7 +355,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DF74F822A120AD500A7581B /* OnBoardingTest.swift in Sources */,
 				0DF4EBDB2A0CBF390075D3DC /* BackGroundView.swift in Sources */,
 				0D027BFB2A08C2DD00F5BBBD /* UserData.swift in Sources */,
 				0D027C042A0B7D8700F5BBBD /* Clouds.swift in Sources */,
@@ -539,7 +535,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"trees/Preview Content\"";
-				DEVELOPMENT_TEAM = VA3J8597P8;
+				DEVELOPMENT_TEAM = YZCVM66B66;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = trees/Info.plist;

@@ -18,7 +18,7 @@ struct AlarmListView: View {
             ScrollView {
                 VStack {
                     if data.isEmpty {
-                        Text("hi").frame(width: width, height: height)
+                        Text("초대 리스트가 없습니다.").frame(width: width, height: height)
                     } else {
                         ForEach(data, id: \.self) { text in
                             AlarmListCell(text: text)

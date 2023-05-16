@@ -22,6 +22,8 @@ struct treesApp: App {
                 }
             }.onAppear {
                 userId = userInfo.id
+            }.onChange(of: userInfo.id) { newValue in
+                userId = newValue
             }
         }
     }

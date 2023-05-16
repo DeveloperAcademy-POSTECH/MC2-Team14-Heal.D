@@ -16,15 +16,17 @@ struct OnboardingView: View {
     }
     
     @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var healthData: HealthData
     @State var userName: String = ""
     @State var onboardingState = OnboardingState.start
     @Binding var isFirst: Bool
+    @Binding var isAnimation: Bool
     
-    let userId: String
+    @Binding var userId: String
     
     var body: some View {
         ZStack {
-            BackgroundView()
+            BackgroundView(isAnimation: $isAnimation)
             Image("onboardingTitle")
                 .offset(y: -200)
             upperSign
@@ -57,6 +59,7 @@ struct OnboardingView: View {
             .animation(.linear(duration: 0.5), value: userName == "")
             .onTapGesture {
                 initialize(name: userName)
+                healthData.healthAuth()
                 CloudKitNotification.shared.requestNotificationPermission()
                 CloudKitNotification.shared.subcribeToNotifications()
                 isFirst.toggle()

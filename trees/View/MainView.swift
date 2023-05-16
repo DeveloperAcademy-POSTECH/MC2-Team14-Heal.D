@@ -19,28 +19,78 @@ struct MainView: View {
     @State private var showAddAlert: Bool = false
     @State private var showExitAlert: Bool = false
     @State private var inviteCode: String = ""
-    
+    @State private var isLoading: Bool = true
     @Binding var userId: String
+    
     @State private var user: User?
-    @State private var coreDataHealths: [Health]  = []
+    
+    @State private var coreDataHealth: Health?
+    @State private var dataReset: Bool = false
+    @State private var isAnimation = false
+    @State private var isAnimalMove = false
+    @State private var animationTimer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        ZStack {
-            BackgroundView()
-            Plant
-            MileStone
-            Buttons
-            BottomSlider
-        }
-        .fullScreenCover(isPresented: $isFirst) {
-            OnboardingView(isFirst: $isFirst, userId: userId)
+        if isFirst {
+            OnboardingView(healthData: healthData, isFirst: $isFirst, isAnimation: $isAnimation, userId: $userId)
                 .environment(\.managedObjectContext, viewContext)
+                .transition(.opacity)
+                .animation(.linear(duration: 0.5), value: isFirst)
+        }
+        else {
+            ZStack {
+                BackgroundView(isAnimation: $isAnimation)
+                Plant
+                MileStone
+                Buttons
+                BottomSlider
+                Animals
+            }.overlay {
+                LaunchingScreen
+            }.onChange(of: isLoading) { _ in
+                configureAllSetting()
+            }
         }
     }
     
     
     
     //MARK: - Components
+    var Animals: some View {
+        ZStack {
+            ForEach(BadgeModel.animals, id: \.self) { animal in
+                Image("\(animal.name)0").resizable()
+                    .offset(animal.offset)
+                    .frame(width: animal.widthSize, height: animal.heightSize)
+            }.opacity(isAnimalMove ? 1 : 0)
+            ForEach(BadgeModel.animals, id: \.self) { animal in
+                Image("\(animal.name)1").resizable()
+                    .offset(animal.offset)
+                    .frame(width: animal.widthSize, height: animal.heightSize)
+            }.opacity(isAnimalMove ? 0 : 1)
+        }.onReceive(animationTimer) { _ in
+            isAnimalMove.toggle()
+        }
+    }
+    
+    
+    var LaunchingScreen: some View {
+        ZStack {
+            BackgroundView(isAnimation: $isAnimation)
+            Image("onboardingTitle")
+        }.ignoresSafeArea()
+            .opacity(isLoading ? 1 : 0)
+            .onAppear {
+                isAnimation.toggle()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation(.linear(duration: 0.4)) {
+                        isLoading = false
+                    }
+                }
+            }
+    }
+    
+    
     var Plant: some View {
         Image("day" + String(user?.grow?.day ?? 1)).offset(y: 30)
     }
@@ -79,7 +129,7 @@ struct MainView: View {
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else {
-                                        HealthCard(user: $user, healths: $coreDataHealths)
+                                        HealthCard(user: $user, healthData: healthData)
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                 }
@@ -104,7 +154,7 @@ struct MainView: View {
                                         FamilyCard().scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else {
-                                        HealthCard(user: $user, healths: $coreDataHealths)
+                                        HealthCard(user: $user, healthData: healthData)
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                 }
@@ -117,39 +167,14 @@ struct MainView: View {
                     .padding(.leading, 60)
                     .padding(.trailing, 40)
                     .padding(.vertical, 30)
-                }
-                .onAppear {
-                    let request = User.fetchRequest()
-                    request.predicate = NSPredicate(format: "id == %@", userId)
-                    user = try! viewContext.fetch(request).first
-                    coreDataHealths = user?.healths?.allObjects as! [Health]
-                    
-                    
-                    healthData.HealthAuth()
-                    
-                    let now = Date()
-                    let nowComponent = Calendar.current.dateComponents([.year, .month, .day], from: now)
-                    
-                    if let todayCoreDataHealth = coreDataHealths.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:$0.date!) == nowComponent }) {
-                        
-                    }
-                    
-                    let coreDataHealth = Health(context: viewContext)
-                    coreDataHealth.id = UUID()
-                    coreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
-                    coreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
-                    coreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
-                    coreDataHealth.date = Date()
-                    coreDataHealth.user = user
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                }.scrollIndicators(.hidden)
+                    .onAppear {
                         if user?.familys?.count == 1 {
                             reader.scrollTo(0, anchor: .center)
                         } else {
                             reader.scrollTo(-1, anchor: .center)
                         }
                     }
-                }
             }
         }
     }
@@ -170,7 +195,9 @@ struct MainView: View {
                             .font(.system(size: 15))
                     }
                 }.alert("팀 탈퇴", isPresented: $showExitAlert) {
-                    Button("OK", role: .destructive, action: {})
+                    Button("OK", role: .destructive, action: {
+                        isAnimation.toggle()
+                    })
                 } message: {
                     Text("그동안 얻은 모든것이 사라집니다. 정말 팀 탈퇴 하시겠습니까?")
                 }
@@ -196,8 +223,12 @@ struct MainView: View {
                 //MARK: -여기에 func 밑에서 메소드로 만들어서 넣어주기
                 .alert("팀 초대", isPresented: $showAddAlert) {
                     TextField("초대 코드를 입력해주세요", text: $inviteCode)
-                    Button("Cancel", role: .cancel, action: {})
-                    Button("OK", action: {})
+                    Button("Cancel", role: .cancel, action: {
+                        isAnimation.toggle()
+                    })
+                    Button("OK", action: {
+                        isAnimation.toggle()
+                    })
                 }
             }
     }
@@ -229,17 +260,7 @@ struct MainView: View {
             Spacer()
         }.padding(.horizontal)
     }
-//    
-//    var Animals: some View {
-//        ZStack {
-//            ForEach(0..<BadgeModel.names.count, id: \.self) { index in
-//                Image(BadgeModel.names[index])
-//                    .offset(BadgeModel.offsets[index])
-//                    .opacity((user?.badges[index].isLock ?? true) ? 0.0 : 1.0)
-//            }
-//        }
-//    }
-    
+
     //MARK: - Methods
     private func getScale(proxy: GeometryProxy) -> CGFloat {
         var scale: CGFloat = 0.8
@@ -250,4 +271,54 @@ struct MainView: View {
         }
         return scale
     }
+    
+    private func configureAllSetting() {
+        if userId != "" {
+            let request = User.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", userId)
+            user = try! viewContext.fetch(request).first
+ 
+            healthData.healthAuth()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if !(user!.isFault) {
+                    print("is not fault!!!!!!!!!!")
+                    
+                    let now = Date()
+                    let nowComponent = Calendar.current.dateComponents([.year, .month, .day], from: now)
+                    
+                    let mutableHealths: NSMutableSet? = user?.healths?.mutableCopy() as? NSMutableSet
+                    if let todayCoreDataHealth: Health = mutableHealths?.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:($0 as! Health).date!) == nowComponent }) as? Health {
+                        print("isNotNull!!")
+                        let newCoreDataHealth = Health(context: viewContext)
+                        newCoreDataHealth.id = todayCoreDataHealth.id
+                        newCoreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
+                        newCoreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
+                        newCoreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
+                        newCoreDataHealth.date = todayCoreDataHealth.date
+                        newCoreDataHealth.user = todayCoreDataHealth.user
+                        print(newCoreDataHealth.description)
+                        
+                        mutableHealths?.remove(todayCoreDataHealth)
+                        mutableHealths?.add(newCoreDataHealth)
+                        user?.healths = mutableHealths?.copy() as? NSSet
+                    } else {
+                        print("isNull!!")
+                        let newCoreDataHealth = Health(context: viewContext)
+                        newCoreDataHealth.id = UUID()
+                        newCoreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
+                        newCoreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
+                        newCoreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
+                        newCoreDataHealth.date = Date()
+                        newCoreDataHealth.user = user
+                        print(newCoreDataHealth.description)
+                        user?.healths?.adding(coreDataHealth)
+                    }
+                    try? viewContext.save()
+                    viewContext.refresh(user!, mergeChanges: false)
+                }
+            }
+        }
+    }
+    
 }

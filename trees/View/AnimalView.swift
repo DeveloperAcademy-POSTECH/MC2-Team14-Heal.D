@@ -31,7 +31,7 @@ struct AnimalView: View {
                             .cornerRadius(15)
                             .frame(height: 90)
                             .overlay(content: {
-                                Image("\(badge.name)").resizable()
+                                Image("\(badge.name)0").resizable()
                                     .brightness(badge.isLock ? -1 : 0)
                                     .scaledToFit()
                                     .padding()

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BackgroundView: View {
-    @State var isAnimation = false
+    @Binding var isAnimation: Bool
     
     let skyGradient: [Color] = [Color("skyStart"), Color("skyMiddle"), Color("skyEnd")]
     
@@ -30,20 +30,11 @@ struct BackgroundView: View {
                             .offset(x: isAnimation ? -500 : 500)
                             .animation(.linear(duration: 30).repeatForever(autoreverses: false), value: isAnimation)
                     }
-                    .onAppear {
-                        isAnimation = true
-                    }
                 }.frame(width: width, height: height * 0.68)
                 Image("ground").resizable().scaledToFill()
                     .offset(y: -height * 0.2)
             }
         }
         .ignoresSafeArea()
-    }
-}
-
-struct BackgroundView_Preview: PreviewProvider {
-    static var previews: some View {
-        BackgroundView()
     }
 }

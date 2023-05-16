@@ -10,29 +10,39 @@ import HealthKit
 
 class HealthData: ObservableObject {
     var healthStore: HKHealthStore? = nil
+    @Published var isChanged: Bool = false
     @Published var numberOfSteps = 0
     @Published var burnedCalories = 0
     @Published var exerciseTime = 0
     
-    func HealthAuth() {
+    func healthAuth() {
         guard HKHealthStore.isHealthDataAvailable() else { fatalError("This app requires a device that supports HealthKit") }
         
         self.healthStore = HKHealthStore()
         
         let share = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!])
         
-        let read = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!, HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!])
+        let read = Set([
+            HKObjectType.quantityType(forIdentifier: .stepCount)!,
+            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
+            HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!
+        ])
         
         self.healthStore!.requestAuthorization(toShare: share, read: read) { (success, error) in
-            print("Request Authorization -- Success: ", success, " Error: ", error ?? "nil")
-            
-            if success {
-                self.StepCount()
-                self.ActiveEnergy()
-                self.ExerciseTime()
+            if let error = error {
+                print("Error ::: \(error)")
+                return
             }
+            
+            
+            self.StepCount()
+            self.ActiveEnergy()
+            self.ExerciseTime()
+            
         }
     }
+    
+    
     
     func StepCount() {
         guard HKHealthStore.isHealthDataAvailable() else { fatalError("This app requires a device that supports HealthKit") }

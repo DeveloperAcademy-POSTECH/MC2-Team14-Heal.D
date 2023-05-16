@@ -10,8 +10,7 @@ import SwiftUI
 struct HealthCard: View {
     
     @Binding var user: User?
-    @Binding var healths: [Health]
-    
+    @ObservedObject var healthData: HealthData
     @EnvironmentObject var defaultMission: DefaultMission
     
     var body: some View {
@@ -24,13 +23,13 @@ struct HealthCard: View {
                         .foregroundColor(.white)
                         .font(.system(size: 17))
                     Spacer()
-                    Text("걸음수 \(healths.first?.numberOfSteps ?? 0)/\(defaultMission.defaultWalk)")
+                    Text("걸음수 \(healthData.numberOfSteps > defaultMission.defaultWalk ? defaultMission.defaultWalk : healthData.numberOfSteps)/\(defaultMission.defaultWalk)")
                         .foregroundColor(Color("lightRed"))
                         .font(.system(size: 14))
-                    Text("칼로리 \(healths.first?.burnedCalories ?? 0)/\(defaultMission.defaultCalories)")
+                    Text("칼로리 \(healthData.burnedCalories > defaultMission.defaultCalories ? defaultMission.defaultCalories : healthData.burnedCalories)/\(defaultMission.defaultCalories)")
                         .foregroundColor(Color("lightGreen"))
                         .font(.system(size: 14))
-                    Text("운동시간 \(healths.first?.exerciseTime ?? 0)/\(defaultMission.defaultExerciseTime)")
+                    Text("운동시간 \(healthData.exerciseTime > defaultMission.defaultExerciseTime ? defaultMission.defaultExerciseTime : healthData.exerciseTime)/\(defaultMission.defaultExerciseTime)")
                         .foregroundColor(Color("lightBlue"))
                         .font(.system(size: 14))
                     Spacer()
@@ -42,6 +41,7 @@ struct HealthCard: View {
                 
             }
             .padding()
+            
         }
     }
 }
