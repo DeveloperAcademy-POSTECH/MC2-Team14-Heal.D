@@ -58,15 +58,17 @@ struct MainView: View {
     //MARK: - Components
     var Animals: some View {
         ZStack {
-            ForEach(BadgeModel.animals, id: \.self) { animal in
-                Image("\(animal.name)0").resizable()
-                    .offset(animal.offset)
-                    .frame(width: animal.widthSize, height: animal.heightSize)
+            ForEach(0..<BadgeModel.animals.count, id: \.self) { idx in
+                Image("\(BadgeModel.animals[idx].name)0").resizable()
+                    .offset(BadgeModel.animals[idx].offset)
+                    .frame(width: BadgeModel.animals[idx].widthSize, height: BadgeModel.animals[idx].heightSize)
+                    .opacity((user?.badges![idx].isOn == true) ? 1 : 0)
             }.opacity(isAnimalMove ? 1 : 0)
-            ForEach(BadgeModel.animals, id: \.self) { animal in
-                Image("\(animal.name)1").resizable()
-                    .offset(animal.offset)
-                    .frame(width: animal.widthSize, height: animal.heightSize)
+            ForEach(0..<BadgeModel.animals.count, id: \.self) { idx in
+                Image("\(BadgeModel.animals[idx].name)1").resizable()
+                    .offset(BadgeModel.animals[idx].offset)
+                    .frame(width: BadgeModel.animals[idx].widthSize, height: BadgeModel.animals[idx].heightSize)
+                    .opacity((user?.badges![idx].isOn == true) ? 1 : 0)
             }.opacity(isAnimalMove ? 0 : 1)
         }.onReceive(animationTimer) { _ in
             isAnimalMove.toggle()
