@@ -99,8 +99,8 @@ struct OnboardingView: View {
         user.name = name
         user.code = String(UUID().uuidString.prefix(6))
         user.badges = []
-        for name in BadgeModel.names {
-            user.badges!.append(BadgeModel(name: name, isOn: false, isLock: false))
+        for animal in BadgeModel.animals {
+            user.badges!.append(BadgeModel(name: animal.name, isOn: false, isLock: false))
         }
         
         let grow = Grow(context: viewContext)
