@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct HealthCard: View {
-    @Binding var user: User?
-    @ObservedObject var healthData: HealthData
-    @EnvironmentObject var defaultMission: DefaultMission
-    
-    @State var bigProgress: CGFloat = 0.0
-    @State var mediumProgress: CGFloat = 0.0
-    @State var smallProgress: CGFloat = 0.0
+    let user: User?
+    let healthData: Health?
+
+    @StateObject var defaultMission: DefaultMission = DefaultMission()
+    @State var isClicked: Bool = false
+
     
     var body: some View {
         ZStack() {
@@ -26,29 +25,52 @@ struct HealthCard: View {
                         .foregroundColor(.white)
                         .font(.system(size: 17))
                     Spacer()
-                    Text("걸음수 \(healthData.numberOfSteps > defaultMission.defaultWalk ? defaultMission.defaultWalk : healthData.numberOfSteps)/\(defaultMission.defaultWalk)")
+                    Text("걸음수 \((healthData?.numberOfSteps ?? 0) > defaultMission.defaultWalk ? Int16(defaultMission.defaultWalk) : (healthData?.numberOfSteps ?? 0))/\(defaultMission.defaultWalk)")
                         .foregroundColor(Color("lightRed"))
                         .font(.system(size: 14))
-                    Text("칼로리 \(healthData.burnedCalories > defaultMission.defaultCalories ? defaultMission.defaultCalories : healthData.burnedCalories)/\(defaultMission.defaultCalories)")
+                    Text("칼로리 \((healthData?.burnedCalories ?? 0) > defaultMission.defaultCalories ? Int16(defaultMission.defaultCalories) : (healthData?.burnedCalories ?? 0))/\(defaultMission.defaultCalories)")
                         .foregroundColor(Color("lightGreen"))
                         .font(.system(size: 14))
-                    Text("운동시간 \(healthData.exerciseTime > defaultMission.defaultExerciseTime ? defaultMission.defaultExerciseTime : healthData.exerciseTime)/\(defaultMission.defaultExerciseTime)")
+                    Text("운동시간 \((healthData?.exerciseTime ?? 0) > defaultMission.defaultExerciseTime ? Int16(defaultMission.defaultExerciseTime) : (healthData?.exerciseTime ?? 0))/\(defaultMission.defaultExerciseTime)")
                         .foregroundColor(Color("lightBlue"))
                         .font(.system(size: 14))
                     Spacer()
                 }
                 Spacer()
-                HealthRing(big: $bigProgress, medium: $mediumProgress, small: $smallProgress)
+                HealthRing()
+                    .environmentObject(defaultMission)
                     .frame(width: 40, height: 40)
                     .padding(.trailing, 30)
-                    .onAppear {
-                        bigProgress = CGFloat(healthData.numberOfSteps > defaultMission.defaultWalk ? defaultMission.defaultWalk : healthData.numberOfSteps) / CGFloat(defaultMission.defaultWalk)
-                        mediumProgress = CGFloat(healthData.burnedCalories > defaultMission.defaultCalories ? defaultMission.defaultCalories : healthData.burnedCalories) / CGFloat(defaultMission.defaultCalories)
-                        smallProgress = CGFloat(healthData.exerciseTime > defaultMission.defaultExerciseTime ? defaultMission.defaultExerciseTime : healthData.exerciseTime) / CGFloat(defaultMission.defaultExerciseTime)
+            }.onTapGesture {
+                resetForAnimation()
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isClicked = true
+                }
+            }.onChange(of: isClicked, perform: { _ in
+                if isClicked {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isClicked = false
                     }
-            }
+                    withAnimation(.easeOut(duration: 1)) {
+                        reloadData()
+                    }
+                }
+            })
             .padding()
-            
+            .overlay {
+                RoundedRectangle(cornerRadius: 15).foregroundColor(.white).opacity(isClicked ? 0.4 : 0)
+            }
         }
+    }
+    
+    func reloadData() {
+        defaultMission.calculatedBigProgress = CGFloat((healthData?.numberOfSteps ?? 0) > defaultMission.defaultWalk ? Int16(defaultMission.defaultWalk) : (healthData?.numberOfSteps ?? 0)) / CGFloat(defaultMission.defaultWalk)
+        defaultMission.calculatedMediumProgress  = CGFloat((healthData?.burnedCalories ?? 0) > defaultMission.defaultCalories ? Int16(defaultMission.defaultCalories) : (healthData?.burnedCalories ?? 0)) / CGFloat(defaultMission.defaultCalories)
+        defaultMission.calculatedSmallProgress  = CGFloat((healthData?.exerciseTime ?? 0) > defaultMission.defaultExerciseTime ? Int16(defaultMission.defaultExerciseTime) : (healthData?.exerciseTime ?? 0)) / CGFloat(defaultMission.defaultExerciseTime)
+    }
+    func resetForAnimation() {
+        defaultMission.calculatedBigProgress = 0
+        defaultMission.calculatedMediumProgress = 0
+        defaultMission.calculatedSmallProgress = 0
     }
 }

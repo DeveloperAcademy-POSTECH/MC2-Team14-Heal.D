@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct AlarmListView: View {
-    var data: [String] = []
+    @Environment(\.managedObjectContext) var viewContext
+    
+    var datas: [String] = []
+    
+    let user: User?
     
     var body: some View {
         GeometryReader { proxy in
@@ -17,22 +21,17 @@ struct AlarmListView: View {
             
             ScrollView {
                 VStack {
-                    if data.isEmpty {
+                    if user?.invitees?.count == 0 {
                         Text("초대 리스트가 없습니다.").frame(width: width, height: height)
                     } else {
-                        ForEach(data, id: \.self) { text in
-                            AlarmListCell(text: text)
+                        ForEach(user?.invitees?.allObjects as! [User], id: \.self) { inviter in
+                            AlarmListCell(text: "\(inviter.name!)에게 초대가 도착했습니다.", inviter: inviter, user: user!)
+                                .environment(\.managedObjectContext, viewContext)
                             Divider()
                         }
                     }
                 }
             }
         }.padding()
-    }
-}
-
-struct AlarmListView_Preview: PreviewProvider {
-    static var previews: some View {
-        AlarmListView()
     }
 }

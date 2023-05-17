@@ -179,7 +179,6 @@
 				62B2D9CD2A11507600E5C4A8 /* Alarms.swift */,
 				DB1FB2012A112E6700D2448F /* CloudKit.swift */,
 				DB6412F42A117519009E0328 /* BadgeModel.swift */,
-				0DD330582A129133009F4B97 /* DefaultMission.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -221,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				DB65CD972A12B3B60062733E /* HealthData.swift */,
+				0DD330582A129133009F4B97 /* DefaultMission.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";

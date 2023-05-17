@@ -22,9 +22,10 @@ struct MainView: View {
     @State private var isLoading: Bool = true
     @Binding var userId: String
     
+    //state일 필요없지않나?
     @State private var user: User?
-    
     @State private var coreDataHealth: Health?
+    
     @State private var dataReset: Bool = false
     @State private var isAnimation = false
     @State private var isAnimalMove = false
@@ -36,6 +37,9 @@ struct MainView: View {
                 .environment(\.managedObjectContext, viewContext)
                 .transition(.opacity)
                 .animation(.linear(duration: 0.5), value: isFirst)
+                .onAppear {
+                    isAnimation.toggle()
+                }
         }
         else {
             ZStack {
@@ -47,8 +51,18 @@ struct MainView: View {
                 Animals
             }.overlay {
                 LaunchingScreen
+                    .onAppear {
+                    isAnimation.toggle()
+                }
             }.onChange(of: isLoading) { _ in
                 configureAllSetting()
+                
+            }.onAppear {
+                isAnimation.toggle()
+                resetForAnimation()
+                withAnimation(.easeIn(duration: 1)) {
+                    reloadData()
+                }
             }
         }
     }
@@ -131,8 +145,19 @@ struct MainView: View {
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else {
-                                        HealthCard(user: $user, healthData: healthData)
+                                        HealthCard(user: (user?.familys?.allObjects as! [User])[num], healthData: (user?.familys?.allObjects as! [User])[num].healths?.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:($0 as! Health).date!) == Calendar.current.dateComponents([.year, .month, .day], from: Date()) }) as? Health)
                                             .scaleEffect(CGSize(width: scale, height: scale))
+                                            .onAppear {
+                                                resetForAnimation()
+                                                if user?.familys?.count == 1 {
+                                                    reader.scrollTo(0, anchor: .center)
+                                                } else {
+                                                    reader.scrollTo(-1, anchor: .center)
+                                                }
+                                                withAnimation(.easeIn(duration: 1)) {
+                                                    reloadData()
+                                                }
+                                            }
                                     }
                                 }
                             }
@@ -153,11 +178,23 @@ struct MainView: View {
                                             .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else if num == -1 {
-                                        FamilyCard().scaleEffect(CGSize(width: scale, height: scale))
+                                        FamilyCard(familys: user?.familys?.allObjects as! [User])
+                                            .scaleEffect(CGSize(width: scale, height: scale))
                                     }
                                     else {
-                                        HealthCard(user: $user, healthData: healthData)
+                                        HealthCard(user: (user?.familys?.allObjects as! [User])[num], healthData: (user?.familys?.allObjects as! [User])[num].healths?.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:($0 as! Health).date!) == Calendar.current.dateComponents([.year, .month, .day], from: Date()) }) as? Health)
                                             .scaleEffect(CGSize(width: scale, height: scale))
+                                            .onAppear {
+                                                resetForAnimation()
+                                                if user?.familys?.count == 1 {
+                                                    reader.scrollTo(0, anchor: .center)
+                                                } else {
+                                                    reader.scrollTo(-1, anchor: .center)
+                                                }
+                                                withAnimation(.easeIn(duration: 1)) {
+                                                    reloadData()
+                                                }
+                                            }
                                     }
                                 }
                             }
@@ -165,18 +202,10 @@ struct MainView: View {
                             .padding(.trailing, 20)
                         }
                     }
-                    .environmentObject(defaultMission)
                     .padding(.leading, 60)
                     .padding(.trailing, 40)
                     .padding(.vertical, 30)
                 }.scrollIndicators(.hidden)
-                    .onAppear {
-                        if user?.familys?.count == 1 {
-                            reader.scrollTo(0, anchor: .center)
-                        } else {
-                            reader.scrollTo(-1, anchor: .center)
-                        }
-                    }
             }
         }
     }
@@ -218,7 +247,7 @@ struct MainView: View {
                         Image("AddButton").resizable()
                             .scaledToFit()
                             .frame(width: 65)
-                        Text("나의 초대코드 : 이름").foregroundColor(.white)
+                        Text("나의 초대코드 : \(user?.code ?? "None")").foregroundColor(.white)
                             .font(.system(size: 15))
                     }
                 }
@@ -229,6 +258,17 @@ struct MainView: View {
                         isAnimation.toggle()
                     })
                     Button("OK", action: {
+                        var invitee: User? = nil
+                        viewContext.performAndWait {
+                            let request = User.fetchRequest()
+                            request.predicate = NSPredicate(format: "code == %@", inviteCode)
+                            invitee = try? viewContext.fetch(request).first
+                        }
+                        if let invitee = invitee {
+                            invitee.addToInvitees(user!)
+                            try? viewContext.save()
+                        }
+
                         isAnimation.toggle()
                     })
                 }
@@ -252,7 +292,8 @@ struct MainView: View {
                 }
                 Spacer()
                 NavigationLink {
-                    AlarmListView()
+                    AlarmListView(user: user)
+                        .environment(\.managedObjectContext, viewContext)
                 } label: {
                     Image("alarmButton")
                         .resizable()
@@ -264,6 +305,8 @@ struct MainView: View {
     }
 
     //MARK: - Methods
+    
+    
     private func getScale(proxy: GeometryProxy) -> CGFloat {
         var scale: CGFloat = 0.8
         let x = proxy.frame(in: .global).minX - 35
@@ -276,36 +319,22 @@ struct MainView: View {
     
     private func configureAllSetting() {
         if userId != "" {
-            let request = User.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", userId)
-            user = try! viewContext.fetch(request).first
- 
-            healthData.healthAuth()
-            
+            viewContext.performAndWait {
+                let request = User.fetchRequest()
+                request.predicate = NSPredicate(format: "id == %@", userId)
+                user = try! viewContext.fetch(request).first
+                healthData.healthAuth()
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 if !(user!.isFault) {
-                    print("is not fault!!!!!!!!!!")
                     
                     let now = Date()
                     let nowComponent = Calendar.current.dateComponents([.year, .month, .day], from: now)
-                    
-                    let mutableHealths: NSMutableSet? = user?.healths?.mutableCopy() as? NSMutableSet
-                    if let todayCoreDataHealth: Health = mutableHealths?.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:($0 as! Health).date!) == nowComponent }) as? Health {
-                        print("isNotNull!!")
-                        let newCoreDataHealth = Health(context: viewContext)
-                        newCoreDataHealth.id = todayCoreDataHealth.id
-                        newCoreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
-                        newCoreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
-                        newCoreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
-                        newCoreDataHealth.date = todayCoreDataHealth.date
-                        newCoreDataHealth.user = todayCoreDataHealth.user
-                        print(newCoreDataHealth.description)
-                        
-                        mutableHealths?.remove(todayCoreDataHealth)
-                        mutableHealths?.add(newCoreDataHealth)
-                        user?.healths = mutableHealths?.copy() as? NSSet
+                    if let todayCoreDataHealth = user?.healths?.first(where: { Calendar.current.dateComponents([.year, .month, .day], from:($0 as! Health).date!) == nowComponent }) as? Health {
+                        todayCoreDataHealth.exerciseTime = Int16(healthData.exerciseTime)
+                        todayCoreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
+                        todayCoreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
                     } else {
-                        print("isNull!!")
                         let newCoreDataHealth = Health(context: viewContext)
                         newCoreDataHealth.id = UUID()
                         newCoreDataHealth.burnedCalories = Int16(healthData.burnedCalories)
@@ -313,14 +342,22 @@ struct MainView: View {
                         newCoreDataHealth.numberOfSteps = Int16(healthData.numberOfSteps)
                         newCoreDataHealth.date = Date()
                         newCoreDataHealth.user = user
-                        print(newCoreDataHealth.description)
-                        user?.healths?.adding(coreDataHealth)
+                        user?.addToHealths(newCoreDataHealth)
                     }
                     try? viewContext.save()
-                    viewContext.refresh(user!, mergeChanges: false)
                 }
             }
         }
+    }
+    private func reloadData() {
+        defaultMission.calculatedBigProgress = CGFloat((healthData.numberOfSteps ) > defaultMission.defaultWalk ? Int(Int16(defaultMission.defaultWalk)) : (healthData.numberOfSteps )) / CGFloat(defaultMission.defaultWalk)
+        defaultMission.calculatedMediumProgress  = CGFloat((healthData.burnedCalories ) > defaultMission.defaultCalories ? Int(Int16(defaultMission.defaultCalories)) : (healthData.burnedCalories )) / CGFloat(defaultMission.defaultCalories)
+        defaultMission.calculatedSmallProgress  = CGFloat((healthData.exerciseTime ) > defaultMission.defaultExerciseTime ? Int(Int16(defaultMission.defaultExerciseTime)) : (healthData.exerciseTime )) / CGFloat(defaultMission.defaultExerciseTime)
+    }
+    private func resetForAnimation() {
+        defaultMission.calculatedBigProgress = 0
+        defaultMission.calculatedMediumProgress = 0
+        defaultMission.calculatedSmallProgress = 0
     }
     
 }

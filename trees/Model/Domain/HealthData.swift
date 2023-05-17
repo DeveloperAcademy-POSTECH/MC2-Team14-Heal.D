@@ -8,12 +8,14 @@
 import Foundation
 import HealthKit
 
+
 class HealthData: ObservableObject {
     var healthStore: HKHealthStore? = nil
     @Published var isChanged: Bool = false
     @Published var numberOfSteps = 0
     @Published var burnedCalories = 0
     @Published var exerciseTime = 0
+    
     
     func healthAuth() {
         guard HKHealthStore.isHealthDataAvailable() else { fatalError("This app requires a device that supports HealthKit") }
@@ -49,6 +51,7 @@ class HealthData: ObservableObject {
         guard let sampleType = HKSampleType.quantityType(forIdentifier: .stepCount) else { return }
         
         let calendar = NSCalendar.current
+            
         let now = Date()
         let components = calendar.dateComponents([.year, .month, .day], from: now)
         

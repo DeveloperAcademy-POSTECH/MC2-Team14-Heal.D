@@ -8,21 +8,39 @@
 import SwiftUI
 
 struct AlarmListCell: View {
+    @Environment(\.managedObjectContext) var viewContext
+    
     var text: String
+    
+    let inviter: User
+    let user: User
+    
     var body: some View {
         HStack {
             Text("\(text)")
             Spacer()
             Button {
-                print("ok")
+                user.addToFamilys(inviter)
+                user.removeFromInvitees(inviter)
+                
+                inviter.addToFamilys(user)
+                inviter.removeFromInvitees(user)
+                try? viewContext.save()
+                viewContext.refresh(user, mergeChanges: false)
+                viewContext.refresh(inviter, mergeChanges: false)
             } label: {
                 Text("수락")
                     .foregroundColor(.white)
             }.frame(width: 60, height: 30)
                 .background(Color.accentColor)
                 .cornerRadius(8)
+            
             Button {
-                print("cancle")
+                user.removeFromInvitees(inviter)
+                inviter.removeFromInvitees(user)
+                try? viewContext.save()
+                viewContext.refresh(user, mergeChanges: false)
+                viewContext.refresh(inviter, mergeChanges: false)
             } label: {
                 Text("거절")
                     .foregroundColor(.white)
@@ -31,12 +49,5 @@ struct AlarmListCell: View {
                 .background(Color.gray)
                 .cornerRadius(8)
         }
-    }
-}
-
-struct AlarmView_Preview: PreviewProvider {
-    static var previews: some View {
-        let text = "textwefniweofnwapqegnioqwbeo"
-        AlarmListCell(text: text)
     }
 }
