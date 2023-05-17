@@ -42,9 +42,9 @@ struct HealthCard: View {
                     .frame(width: 40, height: 40)
                     .padding(.trailing, 30)
                     .onAppear {
-                        bigProgress = CGFloat(healthData.numberOfSteps) / CGFloat(defaultMission.defaultWalk)
-                        mediumProgress = CGFloat(healthData.burnedCalories) / CGFloat(defaultMission.defaultCalories)
-                        smallProgress = CGFloat(healthData.exerciseTime) / CGFloat(defaultMission.defaultExerciseTime)
+                        bigProgress = CGFloat(healthData.numberOfSteps > defaultMission.defaultWalk ? defaultMission.defaultWalk : healthData.numberOfSteps) / CGFloat(defaultMission.defaultWalk)
+                        mediumProgress = CGFloat(healthData.burnedCalories > defaultMission.defaultCalories ? defaultMission.defaultCalories : healthData.burnedCalories) / CGFloat(defaultMission.defaultCalories)
+                        smallProgress = CGFloat(healthData.exerciseTime > defaultMission.defaultExerciseTime ? defaultMission.defaultExerciseTime : healthData.exerciseTime) / CGFloat(defaultMission.defaultExerciseTime)
                     }
             }
             .padding()
