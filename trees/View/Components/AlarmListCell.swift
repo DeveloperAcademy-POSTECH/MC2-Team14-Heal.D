@@ -10,6 +10,8 @@ import SwiftUI
 struct AlarmListCell: View {
     @Environment(\.managedObjectContext) var viewContext
     
+    @Binding var reload: Bool
+    
     var text: String
     
     let inviter: User
@@ -25,9 +27,13 @@ struct AlarmListCell: View {
                 
                 inviter.addToFamilys(user)
                 inviter.removeFromInvitees(user)
+                
                 try? viewContext.save()
+                
                 viewContext.refresh(user, mergeChanges: false)
                 viewContext.refresh(inviter, mergeChanges: false)
+                
+                reload.toggle()
             } label: {
                 Text("수락")
                     .foregroundColor(.white)
@@ -38,9 +44,13 @@ struct AlarmListCell: View {
             Button {
                 user.removeFromInvitees(inviter)
                 inviter.removeFromInvitees(user)
+                
                 try? viewContext.save()
+                
                 viewContext.refresh(user, mergeChanges: false)
                 viewContext.refresh(inviter, mergeChanges: false)
+                
+                reload.toggle()
             } label: {
                 Text("거절")
                     .foregroundColor(.white)

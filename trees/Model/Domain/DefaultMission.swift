@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum RingDiameter: CaseIterable { // 원 중점 위치, 지름을 늘리고 줄이면서 원의 시작위치를 바꿈
-    case small, medium, big, calculated
+    case big, medium, small, calculated
     
     var ringDiameter: CGFloat {
         switch self {
@@ -60,6 +60,10 @@ class DefaultMission: ObservableObject {
     @Published var calculatedBigProgress: CGFloat = 0
     @Published var calculatedMediumProgress: CGFloat = 0
     @Published var calculatedSmallProgress: CGFloat = 0
+    
+    @Published var totalWalk: Int = 0
+    @Published var totalCalories: Int = 0
+    @Published var totalExerciseTime: Int = 0
 
     let ringSetting: [RingDiameter] = RingDiameter.allCases
 }

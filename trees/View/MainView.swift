@@ -227,6 +227,12 @@ struct MainView: View {
                     }
                 }.alert("팀 탈퇴", isPresented: $showExitAlert) {
                     Button("OK", role: .destructive, action: {
+                        if let user = user {
+                            user.familys = NSSet()
+                            user.addToFamilys(user)
+                            try? viewContext.save()
+                            viewContext.refresh(user, mergeChanges: false)
+                        }
                         isAnimation.toggle()
                     })
                 } message: {

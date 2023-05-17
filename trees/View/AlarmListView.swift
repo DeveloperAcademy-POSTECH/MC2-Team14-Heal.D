@@ -10,6 +10,8 @@ import SwiftUI
 struct AlarmListView: View {
     @Environment(\.managedObjectContext) var viewContext
     
+    @State private var reload = false
+    
     var datas: [String] = []
     
     let user: User?
@@ -21,11 +23,12 @@ struct AlarmListView: View {
             
             ScrollView {
                 VStack {
+                    Text(reload.description).opacity(0.0)
                     if user?.invitees?.count == 0 {
                         Text("초대 리스트가 없습니다.").frame(width: width, height: height)
                     } else {
                         ForEach(user?.invitees?.allObjects as! [User], id: \.self) { inviter in
-                            AlarmListCell(text: "\(inviter.name!)에게 초대가 도착했습니다.", inviter: inviter, user: user!)
+                            AlarmListCell(reload: $reload, text: "\(inviter.name!)에게 초대가 도착했습니다.", inviter: inviter, user: user!)
                                 .environment(\.managedObjectContext, viewContext)
                             Divider()
                         }
